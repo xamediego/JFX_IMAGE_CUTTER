@@ -1,0 +1,29 @@
+#rec1{
+    -fx-background-color: d0d0d0;
+    -fx-opacity: 0.45;
+    -fx-border-width: 0 3 0 0 ;
+    -fx-border-color: grey grey grey grey;
+}
+
+#rec2{
+    -fx-background-color: d0d0d0;
+    -fx-opacity: 0.45;
+    -fx-border-width: 0 0 0 3 ;
+    -fx-border-color: grey grey grey grey;
+}
+
+#filter{
+    -fx-opacity: 0;
+}
+
+#lowBar{
+    -fx-background-color: #4a4a4a;
+}
+
+#topBar{
+    -fx-background-color: #4a4a4a;
+}
+
+#midBox{
+    -fx-background-color: #2e2d2d;
+}
