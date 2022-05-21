@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -10,6 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="rootBox" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
@@ -26,53 +26,49 @@
             </Label>
          </children>
       </HBox>
-      <HBox fx:id="midBox" alignment="CENTER" prefHeight="300.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-         <children>
-            <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fx:id="image" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
-                  <StackPane StackPane.alignment="CENTER">
-                     <children>
-                        <HBox fx:id="Xbox" alignment="CENTER" disable="true" visible="false" StackPane.alignment="CENTER">
-                           <children>
-                              <HBox alignment="CENTER" maxHeight="300.0" prefHeight="300.0" fx:id="xFilter">
-                                 <children>
-                                    <HBox id="rec1" fx:id="rec1" HBox.hgrow="ALWAYS" />
-                                    <HBox id="filter" fx:id="XfilterBox" alignment="CENTER" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0">
-                                       <children>
-                                          <Circle id="filterCircle" fill="WHITE" radius="149.0" smooth="false" stroke="#00c1ff" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="2.0" fx:id="xCircle" />
-                                       </children></HBox>
-                                    <HBox id="rec2" fx:id="rec2" HBox.hgrow="ALWAYS" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <VBox fx:id="YBox" alignment="CENTER" visible="false" StackPane.alignment="CENTER">
-                           <children>
-                              <VBox fx:id="yFilter" alignment="CENTER" fillWidth="false" maxWidth="300.0" prefWidth="300.0">
-                                 <children>
-                                    <VBox id="vec1" fx:id="vec1" fillWidth="false" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
-                                    <VBox id="filter" fx:id="YfilterBox" fillWidth="false" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0">
-                                       <children>
-                                          <Circle id="filterCircle" fx:id="yCircle" fill="WHITE" radius="149.0" smooth="false" stroke="#00c1ff" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="2.0" />
-                                       </children></VBox>
-                                    <VBox id="vec2" fx:id="vec2" fillWidth="false" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </StackPane>
-               </children>
-            </StackPane>
-         </children>
+      <HBox fx:id="midBox" alignment="CENTER" fillHeight="false" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets />
          </VBox.margin>
+         <children>
+            <HBox alignment="CENTER" fillHeight="false">
+               <children>
+                  <HBox alignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <HBox fx:id="imageBox" alignment="CENTER" prefHeight="300.0" prefWidth="300.0">
+                     <children>
+                        <StackPane fx:id="imagePane">
+                           <children>
+                              <ImageView fx:id="selectedImage" fitHeight="300.0" pickOnBounds="true" preserveRatio="true" />
+                              <HBox fx:id="cropBox" alignment="CENTER" disable="true" visible="false">
+                                 <children>
+                                    <HBox fx:id="rec1" HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                          <VBox fx:id="vec1" VBox.vgrow="ALWAYS" />
+                                          <HBox fx:id="filterBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0">
+                                             <children>
+                                                <StackPane>
+                                                   <children>
+                                                      <Circle fx:id="filterCircle" fill="DODGERBLUE" radius="150.0" stroke="BLACK" strokeType="INSIDE" />
+                                                      <Rectangle fx:id="filterRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </HBox>
+                                          <VBox fx:id="vec2" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                    </VBox>
+                                    <HBox fx:id="rec2" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+                  <HBox />
+               </children>
+            </HBox>
+         </children>
       </HBox>
       <HBox fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
@@ -86,7 +82,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="459.0">
                <children>
-                  <Slider fx:id="zoomLvl" max="4.0" min="1.0" prefHeight="14.0" prefWidth="232.0" />
+                  <Slider fx:id="zoomSlider" max="4.0" min="1.0" prefHeight="15.0" prefWidth="250.0" HBox.hgrow="NEVER" />
                </children>
             </HBox>
             <HBox fx:id="lowBar1" alignment="CENTER_RIGHT">

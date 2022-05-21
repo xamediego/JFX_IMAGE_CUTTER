@@ -1,47 +1,49 @@
-#rec1{
+#rec1 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 1 0 0 ;
+    -fx-border-width: 0 1 0 0;
     -fx-border-color: grey grey grey grey;
 }
 
-#rec2{
+#rec2 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 0 0 1 ;
+    -fx-border-width: 0 0 0 1;
     -fx-border-color: grey grey grey grey;
 }
 
-#vec1{
+#vec1 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 0 1 0 ;
+    -fx-border-width: 0 0 1 0;
     -fx-border-color: grey grey grey grey;
 }
 
-#vec2{
+#vec2 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 1 0 0 0 ;
+    -fx-border-width: 1 0 0 0;
     -fx-border-color: grey grey grey grey;
 }
 
-#filter{
-    -fx-border-color: #00c1ff;
-}
-
-#filterCircle{
+#filterRectangle {
     -fx-fill: TRANSPARENT;
+    -fx-stroke: #00c1ff;
 }
 
-#lowBar{
+#filterCircle {
+    -fx-fill: TRANSPARENT;
+    -fx-stroke: #00c1ff;
+}
+
+#lowBar {
     -fx-background-color: #4a4a4a;
 }
 
-#topBar{
+#topBar {
     -fx-background-color: #4a4a4a;
 }
 
-#midBox{
+#midBox {
     -fx-background-color: #2e2d2d;
 }
