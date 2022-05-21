@@ -12,6 +12,21 @@
     -fx-border-color: grey grey grey grey;
 }
 
+#vec1{
+    -fx-background-color: d0d0d0;
+    -fx-opacity: 0.45;
+    -fx-border-width: 0 0 3 0 ;
+    -fx-border-color: grey grey grey grey;
+}
+
+#vec2{
+    -fx-background-color: d0d0d0;
+    -fx-opacity: 0.45;
+    -fx-border-width: 3 0 0 0 ;
+    -fx-border-color: grey grey grey grey;
+}
+
+
 #filter{
     -fx-opacity: 0;
 }

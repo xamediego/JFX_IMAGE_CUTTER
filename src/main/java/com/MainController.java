@@ -1,123 +1,188 @@
 package com;
 
-import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
+import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController extends Application {
+public class MainController implements Initializable {
 
     @FXML
     private ImageView image;
     @FXML
-    private HBox filterBox;
+    private HBox XfilterBox;
     @FXML
     private HBox rec1;
     @FXML
     private HBox rec2;
     @FXML
-    private StackPane stackPane;
+    private HBox xFilter;
+    @FXML
+    private VBox yFilter;
+    @FXML
+    private VBox YfilterBox;
+    @FXML
+    private VBox vec1;
+    @FXML
+    private VBox vec2;
+    @FXML
+    private HBox midBox;
 
-    private FileChooser fileChooser = new FileChooser();
-    private String filePath;
+    private final FileChooser fileChooser = new FileChooser();
 
-    private int imageWidth;
-    private int imageHeight;
+    int rightB = 0;
+
+    int leftB = 0;
+
+    int mid = 150;
+
+    int baseLine = 300;
+
+    float dragSpeed = 1;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 
 
     @FXML
     private void selectImage() {
         File selectedFile = fileChooser.showOpenDialog(null);
 
+        disableXFilter();
+        disableYFilter();
+
         if (selectedFile != null) {
 
-            filePath = selectedFile.getAbsolutePath();
+            String filePath = selectedFile.getAbsolutePath();
             Image img = new Image(filePath);
 
             image.setImage(img);
-            image.autosize();
 
-            if (image.getFitWidth() < 300) {
-                filterBox.setPrefWidth(image.getFitWidth());
+            if (image.getImage().getWidth() > image.getImage().getHeight()) {
+
+                midBox.setPrefHeight(300);
+                image.setFitHeight(300);
+
+                double per = (image.getImage().getHeight() - image.getBaselineOffset()) / image.getImage().getHeight();
+
+                int width = (int) (image.getImage().getWidth() - (image.getImage().getWidth() * per));
+
+                leftB = mid - ((width / 2) - mid);
+                rightB = mid + ((width / 2) - mid);
+
+                enableXFilter();
+                configXDrag();
+            }
+
+            if (image.getImage().getHeight() > image.getImage().getWidth()) {
+                double per = (image.getImage().getHeight() - image.getBaselineOffset()) / image.getImage().getHeight();
+                int width = (int) (image.getImage().getWidth() - (image.getImage().getWidth() * per));
+                double per2 = ((image.getBaselineOffset() - width) / width);
+
+                midBox.setPrefHeight(baseLine * (per2 + 1));
+                image.setFitHeight(baseLine * (per2 + 1));
+
+                System.out.println(midBox.getPrefHeight());
+
+
+                enableYFilter();
+                configYDrag();
             }
 
         }
-
-        if (image.getImage().getHeight() > image.getBaselineOffset()) {
-            double f = image.getBaselineOffset() / image.getImage().getHeight();
-            imageWidth = (int) (f * image.getImage().getWidth());
-        }
-
-        System.out.println(imageWidth);
-
-        System.out.println(imageWidth / 2);
-
-        System.out.println((imageWidth / 2) - 150);
-
-
     }
 
+    private void configYDrag() {
+        Vector2D location = new Vector2D();
+        Vector2D velocity = new Vector2D();
 
-    @Override
-    public void start(Stage stage) {
+        YfilterBox.setOnMousePressed(me -> {
+            location.y = ((float) me.getY() - mid);
+            System.out.println(location.y);
+        });
 
+        YfilterBox.setOnMouseDragged(me -> {
+
+            if (image.getImage() != null) {
+
+                velocity.y = (float) (me.getY() - mid);
+
+                if (location.y < velocity.y) {
+                    vec1.setPrefHeight(vec1.getPrefHeight() + dragSpeed);
+                    vec2.setPrefHeight(vec2.getPrefHeight() - dragSpeed);
+                }
+
+
+                if (location.y > velocity.y) {
+                    vec1.setPrefHeight(vec1.getPrefHeight() - dragSpeed);
+                    vec2.setPrefHeight(vec2.getPrefHeight() + dragSpeed);
+                }
+
+
+            }
+        });
     }
 
+    private void configXDrag() {
+        Vector2D location = new Vector2D();
+        Vector2D velocity = new Vector2D();
 
-    //
+        XfilterBox.setOnMousePressed(me -> location.x = ((float) me.getX() - mid));
 
-    //I don't know why this works
-    @FXML
-    private void dragged(MouseEvent event) {
-        if(image.getImage() != null) {
-            final DragContext dragContext = new DragContext();
+        XfilterBox.setOnMouseDragged(me -> {
+            if (image.getImage() != null) {
+                velocity.x = (float) (me.getX() - mid);
 
-            if (filterBox.getLayoutX() > imageWidth / 2) {
-                System.out.println("Over");
+                if (XfilterBox.getLayoutX() < rightB - 2) {
+                    if (location.x < velocity.x) {
+                        rec1.setPrefWidth(rec1.getPrefWidth() + dragSpeed);
+                        rec2.setPrefWidth(rec2.getPrefWidth() - dragSpeed);
+                    }
+                }
+
+                if (XfilterBox.getLayoutX() > leftB + 2) {
+                    if (location.x > velocity.x) {
+                        rec1.setPrefWidth(rec1.getPrefWidth() - dragSpeed);
+                        rec2.setPrefWidth(rec2.getPrefWidth() + dragSpeed);
+                    }
+                }
             }
+        });
+    }
 
-            if (filterBox.getLayoutX() > (imageWidth / 2) - 150) {
-                System.out.println("Under");
-            }
+    private void enableXFilter() {
+        xFilter.setVisible(true);
+        xFilter.setDisable(false);
+    }
 
-            dragContext.mouseAnchorX = event.getX();
+    private void disableXFilter() {
+        xFilter.setVisible(false);
+        xFilter.setDisable(true);
+    }
 
-            rec1.setPrefWidth(rec1.getPrefWidth() + dragContext.mouseAnchorX);
-            rec2.setPrefWidth(rec1.getPrefWidth() - dragContext.mouseAnchorX);
-        }
-}
+    private void enableYFilter() {
+        yFilter.setVisible(true);
+        yFilter.setDisable(false);
+    }
 
-
-private static final class DragContext {
-    public double mouseAnchorX;
-}
+    private void disableYFilter() {
+        yFilter.setVisible(false);
+        yFilter.setDisable(true);
+    }
 
 
     @FXML
     private void save() {
 
-
-        System.out.println(filterBox.getLayoutX());
 //        File file = new File("croppedImage.jpg");
 //
 //        SnapshotParameters parameters = new SnapshotParameters();
