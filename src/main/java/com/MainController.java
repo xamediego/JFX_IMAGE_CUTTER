@@ -1,7 +1,8 @@
 package com;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -9,21 +10,26 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
-
+public class MainController{
     @FXML
     private ImageView image;
+
+    @FXML
+    private HBox xFilter;
     @FXML
     private HBox XfilterBox;
     @FXML
     private HBox rec1;
     @FXML
     private HBox rec2;
+
     @FXML
-    private HBox xFilter;
+    private HBox Xbox;
+
+    @FXML
+    private VBox YBox;
+
     @FXML
     private VBox yFilter;
     @FXML
@@ -32,14 +38,14 @@ public class MainController implements Initializable {
     private VBox vec1;
     @FXML
     private VBox vec2;
+
+    @FXML
+    private Slider zoomLvl;
+
     @FXML
     private HBox midBox;
 
     private final FileChooser fileChooser = new FileChooser();
-
-    int rightB = 0;
-
-    int leftB = 0;
 
     int mid = 150;
 
@@ -47,11 +53,7 @@ public class MainController implements Initializable {
 
     float dragSpeed = 1;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
+    int width = 0;
 
     @FXML
     private void selectImage() {
@@ -69,21 +71,21 @@ public class MainController implements Initializable {
 
             if (image.getImage().getWidth() > image.getImage().getHeight()) {
 
-                midBox.setPrefHeight(300);
-                image.setFitHeight(300);
+                midBox.setPrefHeight(baseLine);
+                image.setFitHeight(baseLine);
 
                 double per = (image.getImage().getHeight() - image.getBaselineOffset()) / image.getImage().getHeight();
 
-                int width = (int) (image.getImage().getWidth() - (image.getImage().getWidth() * per));
+                width = (int) (image.getImage().getWidth() - (image.getImage().getWidth() * per));
 
-                leftB = mid - ((width / 2) - mid);
-                rightB = mid + ((width / 2) - mid);
+                xFilter.setPrefWidth(width);
 
                 enableXFilter();
                 configXDrag();
             }
 
             if (image.getImage().getHeight() > image.getImage().getWidth()) {
+
                 double per = (image.getImage().getHeight() - image.getBaselineOffset()) / image.getImage().getHeight();
                 int width = (int) (image.getImage().getWidth() - (image.getImage().getWidth() * per));
                 double per2 = ((image.getBaselineOffset() - width) / width);
@@ -91,8 +93,7 @@ public class MainController implements Initializable {
                 midBox.setPrefHeight(baseLine * (per2 + 1));
                 image.setFitHeight(baseLine * (per2 + 1));
 
-                System.out.println(midBox.getPrefHeight());
-
+                yFilter.setPrefHeight(image.getFitHeight());
 
                 enableYFilter();
                 configYDrag();
@@ -105,29 +106,23 @@ public class MainController implements Initializable {
         Vector2D location = new Vector2D();
         Vector2D velocity = new Vector2D();
 
-        YfilterBox.setOnMousePressed(me -> {
-            location.y = ((float) me.getY() - mid);
-            System.out.println(location.y);
-        });
+        YfilterBox.setOnMousePressed(me -> location.y = ((float) me.getY() - mid));
 
         YfilterBox.setOnMouseDragged(me -> {
-
             if (image.getImage() != null) {
-
                 velocity.y = (float) (me.getY() - mid);
-
-                if (location.y < velocity.y) {
-                    vec1.setPrefHeight(vec1.getPrefHeight() + dragSpeed);
-                    vec2.setPrefHeight(vec2.getPrefHeight() - dragSpeed);
+                if (vec1.getPrefHeight() < image.getFitHeight() - baseLine) {
+                    if (location.y < velocity.y) {
+                        vec1.setPrefHeight(vec1.getPrefHeight() + dragSpeed);
+                        vec2.setPrefHeight(vec2.getPrefHeight() - dragSpeed);
+                    }
                 }
-
-
-                if (location.y > velocity.y) {
-                    vec1.setPrefHeight(vec1.getPrefHeight() - dragSpeed);
-                    vec2.setPrefHeight(vec2.getPrefHeight() + dragSpeed);
+                if (vec2.getPrefHeight() < image.getFitHeight() - baseLine) {
+                    if (location.y > velocity.y) {
+                        vec1.setPrefHeight(vec1.getPrefHeight() - dragSpeed);
+                        vec2.setPrefHeight(vec2.getPrefHeight() + dragSpeed);
+                    }
                 }
-
-
             }
         });
     }
@@ -140,49 +135,55 @@ public class MainController implements Initializable {
 
         XfilterBox.setOnMouseDragged(me -> {
             if (image.getImage() != null) {
-                velocity.x = (float) (me.getX() - mid);
 
-                if (XfilterBox.getLayoutX() < rightB - 2) {
+
+                velocity.x = (float) (me.getX() - mid);
+                if (rec1.getPrefWidth() < width - baseLine) {
                     if (location.x < velocity.x) {
                         rec1.setPrefWidth(rec1.getPrefWidth() + dragSpeed);
                         rec2.setPrefWidth(rec2.getPrefWidth() - dragSpeed);
                     }
                 }
-
-                if (XfilterBox.getLayoutX() > leftB + 2) {
+                if (rec2.getPrefWidth() < width - baseLine) {
                     if (location.x > velocity.x) {
                         rec1.setPrefWidth(rec1.getPrefWidth() - dragSpeed);
                         rec2.setPrefWidth(rec2.getPrefWidth() + dragSpeed);
                     }
                 }
+
             }
         });
     }
 
     private void enableXFilter() {
-        xFilter.setVisible(true);
-        xFilter.setDisable(false);
+        Xbox.setVisible(true);
+        Xbox.setDisable(false);
+
+        rec1.setPrefWidth(0);
+        rec2.setPrefWidth(0);
     }
 
     private void disableXFilter() {
-        xFilter.setVisible(false);
-        xFilter.setDisable(true);
+        Xbox.setVisible(false);
+        Xbox.setDisable(true);
     }
 
     private void enableYFilter() {
-        yFilter.setVisible(true);
-        yFilter.setDisable(false);
+        YBox.setVisible(true);
+        YBox.setDisable(false);
+
+        vec1.setPrefWidth(0);
+        vec2.setPrefWidth(0);
     }
 
     private void disableYFilter() {
-        yFilter.setVisible(false);
-        yFilter.setDisable(true);
+        YBox.setVisible(false);
+        YBox.setDisable(true);
     }
 
 
     @FXML
     private void save() {
-
 //        File file = new File("croppedImage.jpg");
 //
 //        SnapshotParameters parameters = new SnapshotParameters();
@@ -209,6 +210,7 @@ public class MainController implements Initializable {
 //
 //        graphics.dispose();
     }
+
 }
 
 

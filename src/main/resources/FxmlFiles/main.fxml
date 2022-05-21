@@ -9,86 +9,96 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" fillWidth="false" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+<VBox fx:id="rootBox" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
    <children>
-      <VBox fx:id="rootBox" stylesheets="@main.css">
+      <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
-            <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+            <Label text="Edit Image" textFill="WHITE">
+               <font>
+                  <Font name="Bookshelf Symbol 7" size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox fx:id="midBox" alignment="CENTER" prefHeight="300.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+         <children>
+            <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="Edit Image" textFill="WHITE">
-                     <font>
-                        <Font name="Bookshelf Symbol 7" size="20.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox fx:id="midBox" alignment="CENTER" prefHeight="300.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
+                  <ImageView fx:id="image" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <StackPane StackPane.alignment="CENTER">
                      <children>
-                        <ImageView fx:id="image" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                        <StackPane StackPane.alignment="CENTER">
+                        <HBox fx:id="Xbox" alignment="CENTER" disable="true" visible="false" StackPane.alignment="CENTER">
                            <children>
-                              <HBox alignment="CENTER" disable="true" maxHeight="300.0" prefHeight="300.0" visible="false" StackPane.alignment="CENTER" fx:id="xFilter">
+                              <HBox alignment="CENTER" maxHeight="300.0" prefHeight="300.0" fx:id="xFilter">
                                  <children>
                                     <HBox id="rec1" fx:id="rec1" HBox.hgrow="ALWAYS" />
-                                    <HBox id="filter" fx:id="XfilterBox" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" />
+                                    <HBox id="filter" fx:id="XfilterBox" alignment="CENTER" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0">
+                                       <children>
+                                          <Circle id="filterCircle" fill="WHITE" radius="149.0" smooth="false" stroke="#00c1ff" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="2.0" fx:id="xCircle" />
+                                       </children></HBox>
                                     <HBox id="rec2" fx:id="rec2" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
-                              <VBox fx:id="yFilter" alignment="CENTER" disable="true" fillWidth="false" prefHeight="300.0" prefWidth="300.0" visible="false">
+                           </children>
+                        </HBox>
+                        <VBox fx:id="YBox" alignment="CENTER" visible="false" StackPane.alignment="CENTER">
+                           <children>
+                              <VBox fx:id="yFilter" alignment="CENTER" fillWidth="false" maxWidth="300.0" prefWidth="300.0">
                                  <children>
                                     <VBox id="vec1" fx:id="vec1" fillWidth="false" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
-                                    <VBox id="filter" fx:id="YfilterBox" fillWidth="false" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" />
+                                    <VBox id="filter" fx:id="YfilterBox" fillWidth="false" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0">
+                                       <children>
+                                          <Circle id="filterCircle" fx:id="yCircle" fill="WHITE" radius="149.0" smooth="false" stroke="#00c1ff" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="2.0" />
+                                       </children></VBox>
                                     <VBox id="vec2" fx:id="vec2" fillWidth="false" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                            </children>
-                        </StackPane>
+                        </VBox>
                      </children>
                   </StackPane>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
-            <HBox fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+            </StackPane>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+      <HBox fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+         <children>
+            <HBox alignment="CENTER">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
                <children>
-                  <HBox alignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#selectImage" text="Select File" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="459.0">
+               <children>
+                  <Slider fx:id="zoomLvl" max="4.0" min="1.0" prefHeight="14.0" prefWidth="232.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="lowBar1" alignment="CENTER_RIGHT">
+               <children>
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#save" text="Save">
                      <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets right="10.0" />
                      </HBox.margin>
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#selectImage" text="Select File" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="459.0">
-                     <children>
-                        <Slider fx:id="slider" prefHeight="14.0" prefWidth="232.0" visible="false" />
-                     </children>
-                  </HBox>
-                  <HBox fx:id="lowBar1" alignment="CENTER_RIGHT">
-                     <children>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#save" text="Save">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
+                  </Button>
                </children>
             </HBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
 </VBox>
