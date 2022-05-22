@@ -139,7 +139,7 @@ public class MainController implements Initializable {
         filterRectangle.setHeight(baseLine);
         filterRectangle.setWidth(baseLine);
 
-        selectedImage.setFitHeight(300);
+        selectedImage.setFitHeight(baseLine);
         selectedImage.setFitWidth(0);
 
         rec1.setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -147,64 +147,71 @@ public class MainController implements Initializable {
 
         vec1.setPrefHeight(Region.USE_COMPUTED_SIZE);
         vec2.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
     }
 
     private void configImageView() {
         if (width > height) {
-
-            double per = (height - baseLine) / height;
-            viewWidth = (int) (width - (width * per));
-
-            if (viewWidth > maxWidth) {
-                double ratio = -((viewWidth - maxWidth) / viewWidth);
-
-                viewWidth = maxWidth;
-
-                selectedImage.setFitHeight(baseLine * ratio);
-                selectedImage.setFitWidth(viewWidth);
-
-                filterRectangle.setHeight(selectedImage.getFitHeight());
-                filterRectangle.setWidth(selectedImage.getFitHeight());
-
-                filterCircle.setRadius(selectedImage.getFitHeight() / 2);
-
-                filterBox.setPrefHeight(selectedImage.getFitHeight());
-                filterBox.setPrefWidth(selectedImage.getFitHeight());
-
-                baseLine = (float) selectedImage.getFitHeight();
-            }
+            setHorizontalImage();
         }
 
         if (height > width) {
-            double per = (height - baseLine) / height;
-            viewWidth = (int) (width - (width * per));
-            double per2 = ((baseLine - viewWidth) / viewWidth);
-
-            viewWidth = baseLine;
-
-            selectedImage.setFitHeight(baseLine * (per2 + 1));
-
-            if (selectedImage.getFitHeight() > maxHeight) {
-                double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
-
-                selectedImage.setFitHeight(maxHeight);
-                selectedImage.setFitWidth(baseLine * ratio);
-
-                filterRectangle.setHeight(selectedImage.getFitWidth());
-                filterRectangle.setWidth(selectedImage.getFitWidth());
-
-                filterCircle.setRadius(selectedImage.getFitWidth() / 2);
-
-                filterBox.setPrefHeight(selectedImage.getFitWidth());
-                filterBox.setPrefWidth(selectedImage.getFitWidth());
-
-                baseLine = (float) selectedImage.getFitWidth();
-                viewWidth = selectedImage.getFitWidth();
-            }
-
+            setVerticalImage();
         }
     }
+
+    private void setHorizontalImage() {
+        double per = (height - baseLine) / height;
+        viewWidth = (int) (width - (width * per));
+
+        if (viewWidth > maxWidth) {
+            double ratio = -((viewWidth - maxWidth) / viewWidth);
+
+            viewWidth = maxWidth;
+
+            selectedImage.setFitHeight(baseLine * ratio);
+            selectedImage.setFitWidth(viewWidth);
+
+            filterRectangle.setHeight(selectedImage.getFitHeight());
+            filterRectangle.setWidth(selectedImage.getFitHeight());
+
+            filterCircle.setRadius(selectedImage.getFitHeight() / 2);
+
+            filterBox.setPrefHeight(selectedImage.getFitHeight());
+            filterBox.setPrefWidth(selectedImage.getFitHeight());
+
+            baseLine = (float) selectedImage.getFitHeight();
+        }
+    }
+
+
+
+    private void setVerticalImage() {
+        double per = (height - baseLine) / height;
+        viewWidth = (int) (width - (width * per));
+        double per2 = ((baseLine - viewWidth) / viewWidth);
+
+        viewWidth = baseLine;
+        selectedImage.setFitHeight(baseLine * (per2 + 1));
+
+        if (selectedImage.getFitHeight() > maxHeight) {
+            double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
+
+            selectedImage.setFitHeight(maxHeight);
+            selectedImage.setFitWidth(baseLine * ratio);
+
+            filterRectangle.setHeight(selectedImage.getFitWidth());
+            filterRectangle.setWidth(selectedImage.getFitWidth());
+
+            filterCircle.setRadius(selectedImage.getFitWidth() / 2);
+
+            filterBox.setPrefHeight(selectedImage.getFitWidth());
+            filterBox.setPrefWidth(selectedImage.getFitWidth());
+
+            baseLine = (float) selectedImage.getFitWidth();
+            viewWidth = selectedImage.getFitWidth();
+        }
+    }
+
 
     private void setXDragSpeed() {
         if (selectedImage.getImage().getWidth() > 600) {
@@ -246,11 +253,6 @@ public class MainController implements Initializable {
 
     private void setVerticalView() {
         vSlider.valueProperty().addListener(e -> setVerticalValue(vSlider.getValue()));
-    }
-
-    private void showVHSlider() {
-        sliderBox.getChildren().add(hSlider);
-        sliderBox.getChildren().add(vSlider);
     }
 
     private void hideVHSlider() {
@@ -394,7 +396,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void save(){
+    private void save() {
         if (width > height) {
             setXCrop();
         }
@@ -411,6 +413,7 @@ public class MainController implements Initializable {
         File outputFile = new File("testImage.jpg");
 
         BufferedImage bImage = SwingFXUtils.fromFXImage(writableImage, null);
+
         BufferedImage newBufferedImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         newBufferedImage.createGraphics().drawImage(bImage, 0, 0, Color.WHITE, null);
@@ -428,8 +431,8 @@ public class MainController implements Initializable {
 
         Circle circle = new Circle(avatarView.getBaselineOffset() / 2);
 
-        circle.setLayoutX(avatarView.getFitWidth() /2);
-        circle.setLayoutY(avatarView.getFitHeight() /2);
+        circle.setLayoutX(avatarView.getFitWidth() / 2);
+        circle.setLayoutY(avatarView.getFitHeight() / 2);
 
         avatarView.setClip(circle);
         avatarCircle.setVisible(true);
