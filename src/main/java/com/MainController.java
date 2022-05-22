@@ -225,9 +225,9 @@ public class MainController implements Initializable {
 
     private void setYDragSpeed() {
         if (selectedImage.getImage().getHeight() > 600) {
-            dragY = 0.75 + ((selectedImage.getImage().getHeight() - 600) * 0.005);
+            dragY = 0.75 + ((selectedImage.getImage().getHeight() - 600) * 0.00075);
         } else {
-            dragY = 0.75 - ((selectedImage.getImage().getHeight() - 600) * 0.005);
+            dragY = 0.75 - ((selectedImage.getImage().getHeight() - 600) * 0.00075);
         }
 
         if (dragY < 0.3) {
@@ -396,6 +396,7 @@ public class MainController implements Initializable {
     }
 
     // TODO: 22/05/2022 add ability to crop gifs?
+    // FIXME: 22/05/2022 fix the added row of black pixels at the top when cropping
     @FXML
     private void save() {
         if (width > height) {
