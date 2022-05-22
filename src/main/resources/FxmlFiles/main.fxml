@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootBox" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+<VBox fx:id="rootBox" prefHeight="402.0" prefWidth="913.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
    <children>
       <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
@@ -77,7 +77,7 @@
       </HBox>
       <HBox fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" HBox.hgrow="NEVER">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -85,18 +85,18 @@
                   <Button mnemonicParsing="false" onAction="#selectImage" text="Select File" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefWidth="460.0">
+            <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox fx:id="sliderBox" alignment="CENTER" spacing="5.0">
+                  <VBox fx:id="sliderBox" alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Slider fx:id="zoomSlider" max="4.0" min="1.0" prefHeight="15.0" prefWidth="250.0" />
-                        <Slider fx:id="hSlider" disable="true" max="4.0" prefHeight="15.0" prefWidth="250.0" visible="false" />
-                        <Slider fx:id="vSlider" disable="true" max="4.0" prefHeight="15.0" prefWidth="250.0" visible="false" />
+                        <Slider fx:id="zoomSlider" max="4.0" maxWidth="250.0" min="1.0" prefHeight="15.0" prefWidth="250.0" VBox.vgrow="NEVER" />
+                        <Slider fx:id="hSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0" prefWidth="250.0" visible="false" VBox.vgrow="NEVER" />
+                        <Slider fx:id="vSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0" prefWidth="250.0" visible="false" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="lowBar1" alignment="CENTER_RIGHT">
+            <HBox fx:id="lowBar1" alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
                <children>
                   <Button defaultButton="true" mnemonicParsing="false" onAction="#save" text="Save">
                      <HBox.margin>

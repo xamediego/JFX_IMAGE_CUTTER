@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -13,7 +14,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -28,42 +28,30 @@ public class MainController implements Initializable {
 
     @FXML
     private ImageView selectedImage;
-
     @FXML
     private HBox imageBox;
-
     @FXML
     private HBox cropBox;
-
     @FXML
     private HBox filterBox;
-
     @FXML
     private HBox rec1;
-
     @FXML
     private HBox rec2;
-
     @FXML
     private VBox vec1;
-
     @FXML
     private VBox vec2;
-
     @FXML
     private VBox sliderBox;
-
     @FXML
     private Slider zoomSlider;
-
     @FXML
     private Slider hSlider;
-
     @FXML
     private Slider vSlider;
 
     private final FileChooser fileChooser = new FileChooser();
-
     private Vector2D viewPortVector = new Vector2D();
 
     private float width, height;
@@ -119,7 +107,7 @@ public class MainController implements Initializable {
     private void resetValues() {
         setZoomValue(1);
 
-        viewPortVector = new Vector2D(0,0);
+        viewPortVector = new Vector2D(0, 0);
     }
 
     private void configImageView() {
@@ -282,7 +270,7 @@ public class MainController implements Initializable {
             viewPortVector.x = (float) ((viewWidth - baseLine) / 2 + (rec1.getPrefWidth() / 2));
         }
 
-        if (rec1.getPrefWidth() <=rec2.getPrefWidth()) {
+        if (rec1.getPrefWidth() <= rec2.getPrefWidth()) {
             viewPortVector.x = (float) ((viewWidth - baseLine) / 2 - (rec2.getPrefWidth() / 2));
         }
     }
@@ -297,10 +285,9 @@ public class MainController implements Initializable {
         }
     }
 
+    // TODO: 22/05/2022 add ability to crop gifs?
     @FXML
-    private void save() {
-
-        //can't combine them for some reason...
+    private void save(){
         if (width > height) {
             setXCrop();
         }
@@ -309,24 +296,20 @@ public class MainController implements Initializable {
             setYCrop();
         }
 
-
         File file = new File("croppedImage.jpg");
-
         SnapshotParameters parameters = new SnapshotParameters();
-
         parameters.setFill(Color.TRANSPARENT);
 
-        int avatarSize = 300;
-
         parameters.setViewport(new Rectangle2D(
-                viewPortVector.x, viewPortVector.y, avatarSize, avatarSize));
+                viewPortVector.x, viewPortVector.y, 300, 300));
 
-        WritableImage wi = new WritableImage(avatarSize, avatarSize);
+        WritableImage writableImage = new WritableImage(300, 300);
 
-        selectedImage.snapshot(parameters, wi);
+        selectedImage.snapshot(parameters, writableImage);
 
-        BufferedImage bufImageARGB = SwingFXUtils.fromFXImage(wi, null);
-        BufferedImage bufImageRGB = new BufferedImage(bufImageARGB.getWidth(), bufImageARGB.getHeight(), BufferedImage.OPAQUE);
+        BufferedImage bufImageARGB = SwingFXUtils.fromFXImage(writableImage, null);
+        BufferedImage bufImageRGB = new BufferedImage(
+                bufImageARGB.getWidth(), bufImageARGB.getHeight(), BufferedImage.OPAQUE);
 
         Graphics2D graphics = bufImageRGB.createGraphics();
         graphics.drawImage(bufImageARGB, 0, 0, null);
