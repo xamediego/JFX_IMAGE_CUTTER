@@ -2,16 +2,15 @@ package com;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -21,16 +20,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
 
     @FXML
     private ImageView selectedImage;
-
-    private final FileChooser fileChooser = new FileChooser();
-
-    @FXML
-    private Slider zoomSlider;
 
     @FXML
     private HBox imageBox;
@@ -53,64 +49,114 @@ public class MainController {
     @FXML
     private VBox vec2;
 
-    Vector2D initial = new Vector2D();
+    @FXML
+    private VBox sliderBox;
 
-    private int width, height;
-    private double zoomlvl, hValue, vValue, viewWidth, offSetX, offSetY;
+    @FXML
+    private Slider zoomSlider;
+
+    @FXML
+    private Slider hSlider;
+
+    @FXML
+    private Slider vSlider;
+
+    private final FileChooser fileChooser = new FileChooser();
+
+    private Vector2D viewPortVector;
+
+    private float width, height;
+    private double zoomlvl, viewWidth, offSetX, offSetY;
 
     int dragSpeed = 2;
-
     int mid = 150;
+    float baseLine = 300;
 
-    int baseLine = 300;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        hideVHSlider();
+    }
 
     @FXML
     private void selectImage() {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            resetValues();
-
             String filePath = selectedFile.getAbsolutePath();
 
             Image sourceImage = new Image(filePath);
-
             selectedImage.setImage(sourceImage);
 
             height = (int) sourceImage.getHeight();
             width = (int) sourceImage.getWidth();
 
-            if (width > height) {
-                double per = (height - selectedImage.getBaselineOffset()) / height;
-                viewWidth = (int) (width - (width * per));
-            }
+            configImageView();
 
-            if (height > width) {
-                double per = (height - selectedImage.getBaselineOffset()) / height;
-                int viewWidth = (int) (width - (width * per));
-                double per2 = ((selectedImage.getBaselineOffset() - viewWidth) / viewWidth);
+            offSetX = width / 2;
+            offSetY = height / 2;
 
-                selectedImage.setFitHeight(selectedImage.getBaselineOffset() * (per2 + 1));
-                imageBox.setPrefHeight(selectedImage.getBaselineOffset() * (per2 + 1));
+            hSlider.setMax(width);
+            vSlider.setMax(height);
+            resetValues();
 
-            }
-            configZoomsSlide();
-
-            activeFilterPane();
-
+            setHorizontalView();
+            setVerticalView();
+            setZoomValue();
             configYDrag();
+            activateCropBox();
         }
+    }
+
+    private void activateCropBox() {
+        cropBox.setVisible(true);
+        cropBox.setDisable(false);
     }
 
     private void resetValues() {
         setZoomValue(1);
-
-        selectedImage.setFitHeight(baseLine);
-        imageBox.setPrefHeight(baseLine);
     }
 
-    private void configZoomsSlide() {
+    private void configImageView() {
+        selectedImage.setFitHeight(baseLine);
+        imageBox.setPrefHeight(baseLine);
+
+        if (width > height) {
+            double per = (height - baseLine) / height;
+            viewWidth = (int) (width - (width * per));
+        }
+
+        if (height > width) {
+            double per = (height - baseLine) / height;
+            viewWidth = (int) (width - (width * per));
+            double per2 = ((baseLine - viewWidth) / viewWidth);
+
+            viewWidth = 300;
+
+            selectedImage.setFitHeight(baseLine * (per2 + 1));
+        }
+    }
+
+    private void setZoomValue() {
         zoomSlider.valueProperty().addListener(e -> setZoomValue(zoomSlider.getValue()));
+    }
+
+    private void setHorizontalView() {
+        hSlider.valueProperty().addListener(e -> setHorizontalValue(hSlider.getValue()));
+    }
+
+    private void setVerticalView() {
+        vSlider.valueProperty().addListener(e -> setVerticalValue(vSlider.getValue()));
+    }
+
+    //add function to show / hide Vertical and Horizontal slider later?
+    private void showVHSlider() {
+        sliderBox.getChildren().add(hSlider);
+        sliderBox.getChildren().add(vSlider);
+    }
+
+    private void hideVHSlider() {
+        sliderBox.getChildren().remove(hSlider);
+        sliderBox.getChildren().remove(vSlider);
     }
 
     private void setZoomValue(double value) {
@@ -118,60 +164,53 @@ public class MainController {
 
         double newValue = (double) ((int) (zoomlvl * 10)) / 10;
 
-        if (offSetX < (width / newValue) / 2) {
-            offSetX = (width / newValue) / 2;
-        }
+        setOffSetX(newValue);
+        setOffSetY(newValue);
 
-        if (offSetX > width - ((width / newValue) / 2)) {
-            offSetX = width - ((width / newValue) / 2);
-        }
-
-        if (offSetY < (height / newValue) / 2) {
-            offSetY = (height / newValue) / 2;
-        }
-
-        if (offSetY > height - ((height / newValue) / 2)) {
-            offSetY = height - ((height / newValue) / 2);
-        }
+        hSlider.setValue(offSetX);
+        vSlider.setValue(height - offSetY);
         selectedImage.setViewport(new Rectangle2D(offSetX - ((width / newValue) / 2), offSetY - ((height / newValue) / 2), width / newValue, height / newValue));
     }
 
-    private void setHorizontalView(double value) {
-        int f = 2;
-
+    private void setHorizontalValue(double value) {
         offSetX = value;
         zoomlvl = zoomSlider.getValue();
 
         double newValue = (double) ((int) (zoomlvl * 10)) / 10;
 
-        if (offSetX < (width / newValue) / f) {
-            offSetX = (width / newValue) / f;
-        }
-        if (offSetX > width - ((width / newValue) / f)) {
-            offSetX = width - ((width / newValue) / f);
-        }
+        setOffSetX(newValue);
 
-        selectedImage.setViewport(new Rectangle2D(offSetX - ((width / newValue) / f), offSetY - ((height / newValue) / f), width / newValue, height / newValue));
-
+        selectedImage.setViewport(new Rectangle2D(offSetX - ((width / newValue) / 2), offSetY - ((height / newValue) / 2), width / newValue, height / newValue));
     }
 
-    private void setVerticalView(double value) {
-        int f = 2;
-
+    private void setVerticalValue(double value) {
         offSetY = height - value;
         zoomlvl = zoomSlider.getValue();
 
         double newValue = (double) ((int) (zoomlvl * 10)) / 10;
 
-        if (offSetY < (height / newValue) / f) {
-            offSetY = (height / newValue) / f;
-        }
+        setOffSetY(newValue);
 
-        if (offSetY > height - ((height / newValue) / f)) {
-            offSetY = height - ((height / newValue) / f);
-        }
+        selectedImage.setViewport(new Rectangle2D(offSetX - ((width / newValue) / 2), offSetY - ((height / newValue) / 2), width / newValue, height / newValue));
+    }
 
-        selectedImage.setViewport(new Rectangle2D(offSetX - ((width / newValue) / f), offSetY - ((height / newValue) / f), width / newValue, height / newValue));
+
+    private void setOffSetX(double newValue) {
+        if (offSetX < (width / newValue) / 2) {
+            offSetX = (width / newValue) / 2;
+        }
+        if (offSetX > width - ((width / newValue) / 2)) {
+            offSetX = width - ((width / newValue) / 2);
+        }
+    }
+
+    private void setOffSetY(double newValue) {
+        if (offSetY < (height / newValue) / 2) {
+            offSetY = (height / newValue) / 2;
+        }
+        if (offSetY > height - ((height / newValue) / 2)) {
+            offSetY = height - ((height / newValue) / 2);
+        }
     }
 
     private void configYDrag() {
@@ -196,6 +235,8 @@ public class MainController {
                         vec1.setPrefHeight(vec1.getPrefHeight() + dragSpeed);
                         vec2.setPrefHeight(vec2.getPrefHeight() - dragSpeed);
                     }
+                } else {
+                    vSlider.setValue(vSlider.getValue() - 0.75);
                 }
 
                 if (vec2.getPrefHeight() < selectedImage.getFitHeight() - baseLine) {
@@ -203,6 +244,8 @@ public class MainController {
                         vec1.setPrefHeight(vec1.getPrefHeight() - dragSpeed);
                         vec2.setPrefHeight(vec2.getPrefHeight() + dragSpeed);
                     }
+                } else {
+                    vSlider.setValue(vSlider.getValue() + 0.75);
                 }
 
                 velocity.x = (float) (me.getX() - mid);
@@ -212,6 +255,8 @@ public class MainController {
                         rec1.setPrefWidth(rec1.getPrefWidth() + dragSpeed);
                         rec2.setPrefWidth(rec2.getPrefWidth() - dragSpeed);
                     }
+                } else {
+                    hSlider.setValue(hSlider.getValue() + 0.75);
                 }
 
                 if (rec2.getPrefWidth() < viewWidth - baseLine) {
@@ -219,37 +264,50 @@ public class MainController {
                         rec1.setPrefWidth(rec1.getPrefWidth() - dragSpeed);
                         rec2.setPrefWidth(rec2.getPrefWidth() + dragSpeed);
                     }
+                } else {
+                    hSlider.setValue(hSlider.getValue() - 0.75);
                 }
 
             }
         });
     }
 
-
-    private void activeFilterPane() {
-        cropBox.setVisible(true);
-        cropBox.setDisable(false);
+    private Vector2D setXCrop() {
+        if (rec1.getPrefWidth() > rec2.getPrefWidth()) {
+            return new Vector2D((float) ((viewWidth - baseLine) / 2 + (rec1.getPrefWidth() / 2)), 0);
+        } else {
+            return new Vector2D((float) ((viewWidth - baseLine) / 2 + (rec2.getPrefWidth() / 2)), 0);
+        }
     }
 
-    private void disableFilterPane() {
-        cropBox.setVisible(true);
-        cropBox.setDisable(true);
+    private Vector2D setYCrop() {
+        if (vec1.getPrefHeight() > vec2.getPrefHeight()) {
+            return new Vector2D(0, (float) ((selectedImage.getFitHeight() - baseLine) / 2 + (vec1.getPrefHeight() / 2)));
+        } else {
+            return new Vector2D(0, (float) ((selectedImage.getFitHeight() - baseLine) / 2 + (vec2.getPrefHeight() / 2)));
+        }
     }
-
 
     @FXML
     private void save() {
+        if (width > height) {
+            viewPortVector = setXCrop();
+        }
+
+        if (height > width) {
+            viewPortVector = setYCrop();
+        }
+
         File file = new File("croppedImage.jpg");
 
         SnapshotParameters parameters = new SnapshotParameters();
 
         parameters.setFill(Color.TRANSPARENT);
 
-        int avatarSize = 300;
         parameters.setViewport(new Rectangle2D(
-                imageBox.getLayoutX(), imageBox.getLayoutY(), avatarSize, avatarSize));
+                viewPortVector.x, viewPortVector.y, baseLine, baseLine));
 
-        WritableImage wi = new WritableImage(avatarSize, avatarSize);
+        WritableImage wi = new WritableImage((int) baseLine, (int) baseLine);
 
         selectedImage.snapshot(parameters, wi);
 

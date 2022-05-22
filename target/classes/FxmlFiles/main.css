@@ -1,29 +1,21 @@
 #rec1 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 1 0 0;
-    -fx-border-color: grey grey grey grey;
 }
 
 #rec2 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 0 0 1;
-    -fx-border-color: grey grey grey grey;
 }
 
 #vec1 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: grey grey grey grey;
 }
 
 #vec2 {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
-    -fx-border-width: 1 0 0 0;
-    -fx-border-color: grey grey grey grey;
 }
 
 #filterRectangle {
