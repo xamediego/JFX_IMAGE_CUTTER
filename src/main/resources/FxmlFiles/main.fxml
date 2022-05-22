@@ -13,6 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+
 <VBox fx:id="rootBox" prefHeight="601.0" prefWidth="800.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
    <children>
       <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">

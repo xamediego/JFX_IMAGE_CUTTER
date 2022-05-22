@@ -29,6 +29,9 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     @FXML
+    private ImageView testView;
+
+    @FXML
     private ImageView selectedImage;
     @FXML
     private HBox imageBox;
@@ -396,7 +399,6 @@ public class MainController implements Initializable {
     }
 
     // TODO: 22/05/2022 add ability to crop gifs?
-    // FIXME: 22/05/2022 fix the added row of black pixels at the top when cropping
     @FXML
     private void save() {
         if (width > height) {
@@ -406,8 +408,6 @@ public class MainController implements Initializable {
         if (height > width) {
             setYCrop();
         }
-
-        File file = new File("croppedImage.jpg");
         SnapshotParameters parameters = new SnapshotParameters();
         parameters.setFill(Color.TRANSPARENT);
 
@@ -418,25 +418,22 @@ public class MainController implements Initializable {
 
         selectedImage.snapshot(parameters, writableImage);
 
-        BufferedImage bufImageARGB = SwingFXUtils.fromFXImage(writableImage, null);
-        BufferedImage bufImageRGB = new BufferedImage(
-                bufImageARGB.getWidth(), bufImageARGB.getHeight(), BufferedImage.OPAQUE);
+        File outputFile = new File("testImage.jpg");
 
-        Graphics2D graphics = bufImageRGB.createGraphics();
-        graphics.drawImage(bufImageARGB, 0, 0, null);
-
+        BufferedImage bImage = SwingFXUtils.fromFXImage(writableImage, null);
         try {
-            ImageIO.write(bufImageRGB, "jpg", file);
+            ImageIO.write(bImage, "jpg", outputFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
-        graphics.dispose();
         setNewAvatar(writableImage);
     }
 
     private void setNewAvatar(Image image) {
         avatarView.setImage(image);
+
+        testView.setImage(image);
 
         Circle circle = new Circle(avatarView.getBaselineOffset() / 2);
 
