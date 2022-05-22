@@ -13,7 +13,8 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootBox" prefHeight="402.0" prefWidth="913.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+
+<VBox fx:id="rootBox" prefHeight="400.0" prefWidth="600.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
    <children>
       <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
@@ -25,6 +26,23 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
+            <HBox alignment="CENTER_RIGHT" fillHeight="false" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox id="fixBox" fx:id="avatarBox" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" stylesheets="@main.css">
+                     <children>
+                        <StackPane HBox.hgrow="ALWAYS">
+                           <children>
+                              <ImageView fx:id="avatarView" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                              <Circle fx:id="avatarCircle" fill="DODGERBLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </HBox>
          </children>
       </HBox>
       <HBox fx:id="midBox" alignment="CENTER" fillHeight="false" prefWidth="600.0" VBox.vgrow="ALWAYS">
@@ -35,7 +53,7 @@
             <HBox alignment="CENTER" fillHeight="false">
                <children>
                   <HBox alignment="CENTER" HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="imageBox" alignment="CENTER" prefHeight="300.0" prefWidth="300.0">
+                  <HBox fx:id="imageBox" alignment="CENTER">
                      <children>
                         <StackPane fx:id="imagePane">
                            <children>

@@ -28,6 +28,25 @@
     -fx-stroke: #00c1ff;
 }
 
+#avatarCircle {
+    -fx-fill: TRANSPARENT;
+    -fx-stroke: #fff;
+    -fx-stroke-width: 2;
+    -fx-stroke-type: CENTERED;
+}
+
+#paneBox {
+    -fx-background-color: #2e2d2d;
+}
+
+.scroll-pane{
+    -fx-background-color:transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
 #lowBar {
     -fx-background-color: #4a4a4a;
 }

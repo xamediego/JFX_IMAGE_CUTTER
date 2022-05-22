@@ -5,15 +5,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -32,6 +34,7 @@ public class MainController implements Initializable {
     private HBox imageBox;
     @FXML
     private HBox cropBox;
+
     @FXML
     private HBox filterBox;
     @FXML
@@ -42,6 +45,7 @@ public class MainController implements Initializable {
     private VBox vec1;
     @FXML
     private VBox vec2;
+
     @FXML
     private VBox sliderBox;
     @FXML
@@ -51,14 +55,29 @@ public class MainController implements Initializable {
     @FXML
     private Slider vSlider;
 
+    @FXML
+    private ImageView avatarView;
+    @FXML
+    private HBox avatarBox;
+    @FXML
+    private Circle avatarCircle;
+
+    @FXML
+    private Rectangle filterRectangle;
+    @FXML
+    private Circle filterCircle;
+
     private final FileChooser fileChooser = new FileChooser();
     private Vector2D viewPortVector = new Vector2D();
 
     private float width, height;
-    private double zoomlvl, viewWidth, offSetX, offSetY;
+    private double zoomlvl, viewWidth, offSetX, offSetY, dragX, dragY;
 
     int dragSpeed = 2;
     int mid = 150;
+
+    int maxWidth = 550;
+    int maxHeight = 500;
 
     float baseLine = 300;
 
@@ -72,6 +91,8 @@ public class MainController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
+            resetValues();
+
             String filePath = selectedFile.getAbsolutePath();
 
             Image sourceImage = new Image(filePath);
@@ -89,13 +110,17 @@ public class MainController implements Initializable {
             hSlider.setMax(width);
             vSlider.setMax(height);
 
-            resetValues();
+            zoomSlider.setValue(1);
+
+            setXDragSpeed();
+            setYDragSpeed();
 
             setHorizontalView();
             setVerticalView();
             setZoomValue();
             configYDrag();
             activateCropBox();
+
         }
     }
 
@@ -105,18 +130,52 @@ public class MainController implements Initializable {
     }
 
     private void resetValues() {
-        setZoomValue(1);
-
         viewPortVector = new Vector2D(0, 0);
+        baseLine = 300;
+
+        filterBox.setPrefWidth(baseLine);
+        filterBox.setPrefHeight(baseLine);
+
+        filterCircle.setRadius(baseLine / 2);
+
+        filterRectangle.setHeight(baseLine);
+        filterRectangle.setWidth(baseLine);
+
+        selectedImage.setFitHeight(300);
+        selectedImage.setFitWidth(0);
+
+        rec1.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        rec2.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        vec1.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        vec2.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
     }
 
     private void configImageView() {
-        selectedImage.setFitHeight(baseLine);
-        imageBox.setPrefHeight(baseLine);
-
         if (width > height) {
+
             double per = (height - baseLine) / height;
             viewWidth = (int) (width - (width * per));
+
+            if (viewWidth > maxWidth) {
+                double ratio = -((viewWidth - maxWidth) / viewWidth);
+
+                viewWidth = maxWidth;
+
+                selectedImage.setFitHeight(baseLine * ratio);
+                selectedImage.setFitWidth(viewWidth);
+
+                filterRectangle.setHeight(selectedImage.getFitHeight());
+                filterRectangle.setWidth(selectedImage.getFitHeight());
+
+                filterCircle.setRadius(selectedImage.getFitHeight() / 2);
+
+                filterBox.setPrefHeight(selectedImage.getFitHeight());
+                filterBox.setPrefWidth(selectedImage.getFitHeight());
+
+                baseLine = (float) selectedImage.getFitHeight();
+            }
         }
 
         if (height > width) {
@@ -124,9 +183,58 @@ public class MainController implements Initializable {
             viewWidth = (int) (width - (width * per));
             double per2 = ((baseLine - viewWidth) / viewWidth);
 
-            viewWidth = 300;
+            viewWidth = baseLine;
 
             selectedImage.setFitHeight(baseLine * (per2 + 1));
+
+            if (selectedImage.getFitHeight() > maxHeight) {
+                double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
+
+                selectedImage.setFitHeight(maxHeight);
+                selectedImage.setFitWidth(baseLine * ratio);
+
+                filterRectangle.setHeight(selectedImage.getFitWidth());
+                filterRectangle.setWidth(selectedImage.getFitWidth());
+
+                filterCircle.setRadius(selectedImage.getFitWidth() / 2);
+
+                filterBox.setPrefHeight(selectedImage.getFitWidth());
+                filterBox.setPrefWidth(selectedImage.getFitWidth());
+
+                baseLine = (float) selectedImage.getFitWidth();
+                viewWidth = selectedImage.getFitWidth();
+            }
+
+        }
+    }
+
+    private void setXDragSpeed() {
+        if (selectedImage.getImage().getWidth() > 600) {
+            dragX = 0.75 + ((selectedImage.getImage().getWidth() - 600) * 0.005);
+        } else {
+            dragX = 0.75 - ((selectedImage.getImage().getWidth() - 600) * 0.005);
+        }
+
+        if (dragX < 0.3) {
+            dragX = 0.3;
+        }
+        if (dragX > 2.2) {
+            dragX = 2.2;
+        }
+    }
+
+    private void setYDragSpeed() {
+        if (selectedImage.getImage().getHeight() > 600) {
+            dragY = 0.75 + ((selectedImage.getImage().getHeight() - 600) * 0.005);
+        } else {
+            dragY = 0.75 - ((selectedImage.getImage().getHeight() - 600) * 0.005);
+        }
+
+        if (dragY < 0.3) {
+            dragY = 0.3;
+        }
+        if (dragY > 2.2) {
+            dragY = 2.2;
         }
     }
 
@@ -229,7 +337,7 @@ public class MainController implements Initializable {
                         vec2.setPrefHeight(vec2.getPrefHeight() - dragSpeed);
                     }
                 } else {
-                    vSlider.setValue(vSlider.getValue() - 0.75);
+                    vSlider.setValue(vSlider.getValue() - dragY);
                 }
 
                 if (vec2.getPrefHeight() < selectedImage.getFitHeight() - baseLine) {
@@ -238,7 +346,7 @@ public class MainController implements Initializable {
                         vec2.setPrefHeight(vec2.getPrefHeight() + dragSpeed);
                     }
                 } else {
-                    vSlider.setValue(vSlider.getValue() + 0.75);
+                    vSlider.setValue(vSlider.getValue() + dragY);
                 }
 
                 velocity.x = (float) (me.getX() - mid);
@@ -249,7 +357,8 @@ public class MainController implements Initializable {
                         rec2.setPrefWidth(rec2.getPrefWidth() - dragSpeed);
                     }
                 } else {
-                    hSlider.setValue(hSlider.getValue() + 0.75);
+                    hSlider.setValue(hSlider.getValue() + dragX);
+
                 }
 
                 if (rec2.getPrefWidth() < viewWidth - baseLine) {
@@ -258,7 +367,8 @@ public class MainController implements Initializable {
                         rec2.setPrefWidth(rec2.getPrefWidth() + dragSpeed);
                     }
                 } else {
-                    hSlider.setValue(hSlider.getValue() - 0.75);
+                    hSlider.setValue(hSlider.getValue() - dragX);
+
                 }
 
             }
@@ -287,7 +397,7 @@ public class MainController implements Initializable {
 
     // TODO: 22/05/2022 add ability to crop gifs?
     @FXML
-    private void save(){
+    private void save() {
         if (width > height) {
             setXCrop();
         }
@@ -301,9 +411,9 @@ public class MainController implements Initializable {
         parameters.setFill(Color.TRANSPARENT);
 
         parameters.setViewport(new Rectangle2D(
-                viewPortVector.x, viewPortVector.y, 300, 300));
+                viewPortVector.x, viewPortVector.y, baseLine, baseLine));
 
-        WritableImage writableImage = new WritableImage(300, 300);
+        WritableImage writableImage = new WritableImage((int) baseLine, (int) baseLine);
 
         selectedImage.snapshot(parameters, writableImage);
 
@@ -321,6 +431,19 @@ public class MainController implements Initializable {
         }
 
         graphics.dispose();
+        setNewAvatar(writableImage);
+    }
+
+    private void setNewAvatar(Image image) {
+        avatarView.setImage(image);
+
+        Circle circle = new Circle(avatarView.getBaselineOffset() / 2);
+
+        circle.setLayoutX(avatarView.getFitWidth() /2);
+        circle.setLayoutY(avatarView.getFitHeight() /2);
+
+        avatarView.setClip(circle);
+        avatarCircle.setVisible(true);
     }
 
 }
