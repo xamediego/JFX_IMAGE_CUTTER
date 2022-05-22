@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,7 +12,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -27,9 +25,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-
-    @FXML
-    private ImageView testView;
 
     @FXML
     private ImageView selectedImage;
@@ -61,8 +56,6 @@ public class MainController implements Initializable {
     @FXML
     private ImageView avatarView;
     @FXML
-    private HBox avatarBox;
-    @FXML
     private Circle avatarCircle;
 
     @FXML
@@ -74,7 +67,7 @@ public class MainController implements Initializable {
     private Vector2D viewPortVector = new Vector2D();
 
     private float width, height;
-    private double zoomlvl, viewWidth, offSetX, offSetY, dragX, dragY;
+    private double zoomLvl, viewWidth, offSetX, offSetY, dragX, dragY;
 
     int dragSpeed = 2;
     int mid = 150;
@@ -264,9 +257,9 @@ public class MainController implements Initializable {
     }
 
     private void setZoomValue(double value) {
-        zoomlvl = value;
+        zoomLvl = value;
 
-        double newValue = (double) ((int) (zoomlvl * 10)) / 10;
+        double newValue = (double) ((int) (zoomLvl * 10)) / 10;
 
         setOffSetX(newValue);
         setOffSetY(newValue);
@@ -278,9 +271,9 @@ public class MainController implements Initializable {
 
     private void setHorizontalValue(double value) {
         offSetX = value;
-        zoomlvl = zoomSlider.getValue();
+        zoomLvl = zoomSlider.getValue();
 
-        double newValue = (double) ((int) (zoomlvl * 10)) / 10;
+        double newValue = (double) ((int) (zoomLvl * 10)) / 10;
 
         setOffSetX(newValue);
 
@@ -289,9 +282,9 @@ public class MainController implements Initializable {
 
     private void setVerticalValue(double value) {
         offSetY = height - value;
-        zoomlvl = zoomSlider.getValue();
+        zoomLvl = zoomSlider.getValue();
 
-        double newValue = (double) ((int) (zoomlvl * 10)) / 10;
+        double newValue = (double) ((int) (zoomLvl * 10)) / 10;
 
         setOffSetY(newValue);
 
@@ -398,7 +391,6 @@ public class MainController implements Initializable {
         }
     }
 
-    // TODO: 22/05/2022 add ability to crop gifs?
     @FXML
     private void save() {
         if (width > height) {
@@ -408,22 +400,25 @@ public class MainController implements Initializable {
         if (height > width) {
             setYCrop();
         }
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setFill(Color.TRANSPARENT);
-
-        parameters.setViewport(new Rectangle2D(
-                viewPortVector.x, viewPortVector.y, baseLine, baseLine));
 
         WritableImage writableImage = new WritableImage((int) baseLine, (int) baseLine);
 
-        selectedImage.snapshot(parameters, writableImage);
+        //had to create the snapshot in a different class because awt.color and jfx.color don't bug each other
+        selectedImage.snapshot(SnapShot.getSnapShot(viewPortVector, baseLine), writableImage);
 
         File outputFile = new File("testImage.jpg");
 
         BufferedImage bImage = SwingFXUtils.fromFXImage(writableImage, null);
+
+        BufferedImage newBufferedImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+        newBufferedImage.createGraphics().drawImage(bImage, 0, 0, Color.WHITE, null);
+
         try {
-            ImageIO.write(bImage, "jpg", outputFile);
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+
         } catch (IOException e) {
+
             throw new RuntimeException(e);
         }
 
@@ -432,8 +427,6 @@ public class MainController implements Initializable {
 
     private void setNewAvatar(Image image) {
         avatarView.setImage(image);
-
-        testView.setImage(image);
 
         Circle circle = new Circle(avatarView.getBaselineOffset() / 2);
 
