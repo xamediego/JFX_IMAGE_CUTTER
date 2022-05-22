@@ -17,10 +17,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -392,7 +394,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void save() {
+    private void save(){
         if (width > height) {
             setXCrop();
         }
@@ -409,19 +411,15 @@ public class MainController implements Initializable {
         File outputFile = new File("testImage.jpg");
 
         BufferedImage bImage = SwingFXUtils.fromFXImage(writableImage, null);
-
         BufferedImage newBufferedImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         newBufferedImage.createGraphics().drawImage(bImage, 0, 0, Color.WHITE, null);
 
         try {
             ImageIO.write(newBufferedImage, "jpg", outputFile);
-
         } catch (IOException e) {
-
             throw new RuntimeException(e);
         }
-
         setNewAvatar(writableImage);
     }
 
