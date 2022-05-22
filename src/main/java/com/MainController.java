@@ -13,6 +13,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -63,13 +64,14 @@ public class MainController implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
-    private Vector2D viewPortVector;
+    private Vector2D viewPortVector = new Vector2D();
 
     private float width, height;
     private double zoomlvl, viewWidth, offSetX, offSetY;
 
     int dragSpeed = 2;
     int mid = 150;
+
     float baseLine = 300;
 
     @Override
@@ -85,6 +87,7 @@ public class MainController implements Initializable {
             String filePath = selectedFile.getAbsolutePath();
 
             Image sourceImage = new Image(filePath);
+
             selectedImage.setImage(sourceImage);
 
             height = (int) sourceImage.getHeight();
@@ -97,6 +100,7 @@ public class MainController implements Initializable {
 
             hSlider.setMax(width);
             vSlider.setMax(height);
+
             resetValues();
 
             setHorizontalView();
@@ -114,6 +118,8 @@ public class MainController implements Initializable {
 
     private void resetValues() {
         setZoomValue(1);
+
+        viewPortVector = new Vector2D(0,0);
     }
 
     private void configImageView() {
@@ -148,7 +154,6 @@ public class MainController implements Initializable {
         vSlider.valueProperty().addListener(e -> setVerticalValue(vSlider.getValue()));
     }
 
-    //add function to show / hide Vertical and Horizontal slider later?
     private void showVHSlider() {
         sliderBox.getChildren().add(hSlider);
         sliderBox.getChildren().add(vSlider);
@@ -272,31 +277,38 @@ public class MainController implements Initializable {
         });
     }
 
-    private Vector2D setXCrop() {
-        if (rec1.getPrefWidth() > rec2.getPrefWidth()) {
-            return new Vector2D((float) ((viewWidth - baseLine) / 2 + (rec1.getPrefWidth() / 2)), 0);
-        } else {
-            return new Vector2D((float) ((viewWidth - baseLine) / 2 + (rec2.getPrefWidth() / 2)), 0);
+    private void setXCrop() {
+        if (rec1.getPrefWidth() >= rec2.getPrefWidth()) {
+            viewPortVector.x = (float) ((viewWidth - baseLine) / 2 + (rec1.getPrefWidth() / 2));
+        }
+
+        if (rec1.getPrefWidth() <=rec2.getPrefWidth()) {
+            viewPortVector.x = (float) ((viewWidth - baseLine) / 2 - (rec2.getPrefWidth() / 2));
         }
     }
 
-    private Vector2D setYCrop() {
-        if (vec1.getPrefHeight() > vec2.getPrefHeight()) {
-            return new Vector2D(0, (float) ((selectedImage.getFitHeight() - baseLine) / 2 + (vec1.getPrefHeight() / 2)));
-        } else {
-            return new Vector2D(0, (float) ((selectedImage.getFitHeight() - baseLine) / 2 + (vec2.getPrefHeight() / 2)));
+    private void setYCrop() {
+        if (vec1.getPrefHeight() >= vec2.getPrefHeight()) {
+            viewPortVector.y = (float) ((selectedImage.getFitHeight() - baseLine) / 2 + (vec1.getPrefHeight() / 2));
+        }
+
+        if (vec1.getPrefHeight() <= vec2.getPrefHeight()) {
+            viewPortVector.y = (float) ((selectedImage.getFitHeight() - baseLine) / 2 - (vec2.getPrefHeight() / 2));
         }
     }
 
     @FXML
     private void save() {
+
+        //can't combine them for some reason...
         if (width > height) {
-            viewPortVector = setXCrop();
+            setXCrop();
         }
 
         if (height > width) {
-            viewPortVector = setYCrop();
+            setYCrop();
         }
+
 
         File file = new File("croppedImage.jpg");
 
@@ -304,10 +316,12 @@ public class MainController implements Initializable {
 
         parameters.setFill(Color.TRANSPARENT);
 
-        parameters.setViewport(new Rectangle2D(
-                viewPortVector.x, viewPortVector.y, baseLine, baseLine));
+        int avatarSize = 300;
 
-        WritableImage wi = new WritableImage((int) baseLine, (int) baseLine);
+        parameters.setViewport(new Rectangle2D(
+                viewPortVector.x, viewPortVector.y, avatarSize, avatarSize));
+
+        WritableImage wi = new WritableImage(avatarSize, avatarSize);
 
         selectedImage.snapshot(parameters, wi);
 
