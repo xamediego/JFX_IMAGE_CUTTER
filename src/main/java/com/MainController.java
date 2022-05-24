@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,12 +18,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -74,10 +74,10 @@ public class MainController implements Initializable {
     int dragSpeed = 2;
     int mid = 150;
 
-    int maxWidth = 550;
+    int maxWidth = 600;
     int maxHeight = 500;
 
-    float baseLine = 300;
+    float baseLine;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -116,7 +116,7 @@ public class MainController implements Initializable {
             setHorizontalView();
             setVerticalView();
             setZoomValue();
-            configYDrag();
+            configDrag();
             activateCropBox();
 
         }
@@ -129,7 +129,7 @@ public class MainController implements Initializable {
 
     private void resetValues() {
         viewPortVector = new Vector2D(0, 0);
-        baseLine = 300;
+        baseLine = 400;
 
         filterBox.setPrefWidth(baseLine);
         filterBox.setPrefHeight(baseLine);
@@ -141,6 +141,7 @@ public class MainController implements Initializable {
 
         selectedImage.setFitHeight(baseLine);
         selectedImage.setFitWidth(0);
+        selectedImage.setViewport(new Rectangle2D(0, 0, 0, 0));
 
         rec1.setPrefWidth(Region.USE_COMPUTED_SIZE);
         rec2.setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -161,10 +162,11 @@ public class MainController implements Initializable {
 
     private void setHorizontalImage() {
         double per = (height - baseLine) / height;
+
         viewWidth = (int) (width - (width * per));
 
         if (viewWidth > maxWidth) {
-            double ratio = -((viewWidth - maxWidth) / viewWidth);
+            double ratio = 1 - ((viewWidth - maxWidth) / viewWidth);
 
             viewWidth = maxWidth;
 
@@ -182,7 +184,6 @@ public class MainController implements Initializable {
             baseLine = (float) selectedImage.getFitHeight();
         }
     }
-
 
 
     private void setVerticalImage() {
@@ -224,7 +225,7 @@ public class MainController implements Initializable {
             dragX = 0.3;
         }
         if (dragX > 2.2) {
-            dragX = 2.2;
+            dragX = 1.25;
         }
     }
 
@@ -239,7 +240,7 @@ public class MainController implements Initializable {
             dragY = 0.3;
         }
         if (dragY > 2.2) {
-            dragY = 2.2;
+            dragY = 1.25;
         }
     }
 
@@ -314,7 +315,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void configYDrag() {
+    private void configDrag() {
         Vector2D location = new Vector2D();
         Vector2D velocity = new Vector2D();
 
@@ -326,7 +327,6 @@ public class MainController implements Initializable {
 
         filterBox.setOnMouseDragged(me -> {
             if (selectedImage.getImage() != null) {
-
                 imageBox.setCursor(Cursor.OPEN_HAND);
 
                 velocity.y = (float) (me.getY() - viewWidth);
@@ -370,7 +370,6 @@ public class MainController implements Initializable {
                     hSlider.setValue(hSlider.getValue() - dragX);
 
                 }
-
             }
         });
     }
@@ -407,14 +406,17 @@ public class MainController implements Initializable {
 
         WritableImage writableImage = new WritableImage((int) baseLine, (int) baseLine);
 
-        //had to create the snapshot in a different class because awt.color and jfx.color don't bug each other
-        selectedImage.snapshot(SnapShot.getSnapShot(viewPortVector, baseLine), writableImage);
+        SnapshotParameters parameters = new SnapshotParameters();
 
-        File outputFile = new File("testImage.jpg");
+        parameters.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        parameters.setViewport(new Rectangle2D(viewPortVector.x, viewPortVector.y, baseLine, baseLine));
+
+        selectedImage.snapshot(parameters, writableImage);
+
+        File outputFile = new File("CroppedImage.jpg");
 
         BufferedImage bImage = SwingFXUtils.fromFXImage(writableImage, null);
-
-        BufferedImage newBufferedImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        BufferedImage newBufferedImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(), 1);
 
         newBufferedImage.createGraphics().drawImage(bImage, 0, 0, Color.WHITE, null);
 
@@ -423,6 +425,7 @@ public class MainController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         setNewAvatar(writableImage);
     }
 
