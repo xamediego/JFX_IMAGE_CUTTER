@@ -1,19 +1,4 @@
-#rec1 {
-    -fx-background-color: d0d0d0;
-    -fx-opacity: 0.45;
-}
-
-#rec2 {
-    -fx-background-color: d0d0d0;
-    -fx-opacity: 0.45;
-}
-
-#vec1 {
-    -fx-background-color: d0d0d0;
-    -fx-opacity: 0.45;
-}
-
-#vec2 {
+#filterFiller {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
 }
@@ -39,22 +24,50 @@
     -fx-background-color: #2e2d2d;
 }
 
-.scroll-pane{
-    -fx-background-color:transparent;
+#selectFile {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #807575;
+
+    -fx-background-radius: 6px;
 }
 
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
+#selectFile:hover {
+    -fx-background-color: rgba(145, 142, 142, 0.82);
+    -fx-opacity: 0.45;
 }
 
-#lowBar {
-    -fx-background-color: #4a4a4a;
-}
-
-#topBar {
-    -fx-background-color: #4a4a4a;
-}
-
-#midBox {
+#rootBox {
+    -fx-background-radius: 15;
     -fx-background-color: #2e2d2d;
 }
+
+#saveButton {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #5581d5;
+    -fx-background-radius: 6px;
+}
+
+#saveButton:hover {
+    -fx-background-color: #3b74e0;
+    -fx-opacity: 0.9;
+}
+
+#cancelButton {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: TRANSPARENT;
+    -fx-background-radius: 6px;
+
+    -fx-border-width: 1 1 1 1 ;
+    -fx-border-color: RED;
+
+    -fx-border-radius: 6px;
+}
+
+#cancelButton:hover {
+    -fx-background-color: #ff3737;
+    -fx-opacity: 0.8;
+}
+
+

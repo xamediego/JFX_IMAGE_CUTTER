@@ -14,11 +14,12 @@ public class JFXApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(
-                getClass().getResource("/FxmlFiles/main.fxml"));
+    public void start(Stage stage) {
+        SnapShotScene snapShotScene = new SnapShotScene();
+        snapShotScene.setBaseLine(200,300);
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(snapShotScene.getRoot());
+
         stage.setScene(scene);
 
         stage.getIcons().add(new Image("/icon.png"));
