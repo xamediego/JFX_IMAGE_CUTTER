@@ -16,7 +16,7 @@ public class JFXApplication extends Application {
     @Override
     public void start(Stage stage) {
         SnapShotScene snapShotScene = new SnapShotScene();
-        snapShotScene.setBaseLine(200,300);
+        snapShotScene.setBaseLine(238,350);
 
         Scene scene = new Scene(snapShotScene.getRoot());
 

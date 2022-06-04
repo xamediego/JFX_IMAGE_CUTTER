@@ -224,35 +224,42 @@ public class SnapShotController implements Initializable {
         viewWidth = currentBase.x;
         selectedImage.setFitHeight(currentBase.y * (per2 + 1));
 
-        System.out.println(selectedImage.getFitHeight() + " < " + currentBase.y);
-
         if (selectedImage.getFitHeight() < currentBase.y) {
-            double per3 = 1 + ((currentBase.y - selectedImage.getFitHeight()) / selectedImage.getFitHeight());
-
-            selectedImage.setFitHeight(currentBase.y);
-            selectedImage.setFitWidth(currentBase.x * per3);
-
-            System.out.println(selectedImage.getFitHeight() + " < " + currentBase.y);
-
-            viewWidth = selectedImage.getFitWidth();
-        } else {
-            if (selectedImage.getFitHeight() > maxHeight) {
-                double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
-
-                selectedImage.setFitHeight(maxHeight);
-                selectedImage.setFitWidth(currentBase.x * ratio);
-
-                filterRectangle.setHeight(selectedImage.getFitWidth());
-                filterRectangle.setWidth(selectedImage.getFitWidth());
-
-                filterCircle.setRadius(selectedImage.getFitWidth() / 2);
-
-                filterBox.setPrefSize(selectedImage.getFitWidth(), selectedImage.getFitWidth());
-
-                currentBase.x = (float) selectedImage.getFitWidth();
-                viewWidth = selectedImage.getFitWidth();
-            }
+            adjustToYBase();
         }
+
+        if (selectedImage.getFitHeight() > maxHeight) {
+            maxHeightAdjustment();
+        }
+
+    }
+
+    private void adjustToYBase(){
+        double per3 = 1 + ((currentBase.y - selectedImage.getFitHeight()) / selectedImage.getFitHeight());
+
+        selectedImage.setFitHeight(currentBase.y);
+        selectedImage.setFitWidth(currentBase.x * per3);
+
+        viewWidth = selectedImage.getFitWidth();
+    }
+
+    private void maxHeightAdjustment(){
+        double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
+
+        selectedImage.setFitHeight(maxHeight);
+        selectedImage.setFitWidth(currentBase.x * ratio);
+
+        filterRectangle.setHeight(currentBase.y * ratio);
+        filterRectangle.setWidth(selectedImage.getFitWidth());
+
+        filterCircle.setRadius(selectedImage.getFitWidth() / 2);
+
+        filterBox.setPrefSize(selectedImage.getFitWidth(), currentBase.y * ratio);
+
+        currentBase.x = (float) selectedImage.getFitWidth();
+        currentBase.y *= ratio;
+        viewWidth = selectedImage.getFitWidth();
+
     }
 
     // ----- Methods used to make the box move around the image -----
