@@ -75,7 +75,7 @@ public class SnapShotController implements Initializable {
     private double zoomLvl, viewWidth, offSetX, offSetY, dragX, dragY;
 
     int dragSpeed = 2;
-    int mid = 150;
+    int mid = 0;
 
     private int maxWidth = 600;
     private int maxHeight = 425;
@@ -110,40 +110,47 @@ public class SnapShotController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            saveButton.setDisable(false);
-            sliderBox.setDisable(false);
-            sliderBox.setVisible(true);
-
-            resetValues();
-
             String filePath = selectedFile.getAbsolutePath();
 
-            Image sourceImage = new Image(filePath);
-
-            selectedImage.setImage(sourceImage);
-
-            height = (int) sourceImage.getHeight();
-            width = (int) sourceImage.getWidth();
-
-            configImageView();
-
-            offSetX = width / 2;
-            offSetY = height / 2;
-
-            hSlider.setMax(width);
-            vSlider.setMax(height);
-
-            zoomSlider.setValue(1);
-
-            setXDragSpeed();
-            setYDragSpeed();
-
-            setHorizontalView();
-            setVerticalView();
-            setZoomValue();
-            configDrag();
-            activateCropBox();
+            configureSnapper(new Image(filePath));
         }
+
+    }
+
+    public void setImage(Image image) {
+        configureSnapper(image);
+    }
+
+    private void configureSnapper(Image sourceImage) {
+        saveButton.setDisable(false);
+        sliderBox.setDisable(false);
+        sliderBox.setVisible(true);
+
+        resetValues();
+
+        selectedImage.setImage(sourceImage);
+
+        height = (int) sourceImage.getHeight();
+        width = (int) sourceImage.getWidth();
+
+        configImageView();
+
+        offSetX = width / 2;
+        offSetY = height / 2;
+
+        hSlider.setMax(width);
+        vSlider.setMax(height);
+
+        zoomSlider.setValue(1);
+
+        setXDragSpeed();
+        setYDragSpeed();
+
+        setHorizontalView();
+        setVerticalView();
+        setZoomValue();
+        configDrag();
+        activateCropBox();
     }
 
     private void activateCropBox() {
@@ -154,7 +161,7 @@ public class SnapShotController implements Initializable {
     private void resetValues() {
         viewPortVector = new Vector2D(0, 0);
 
-        currentBase = startBase;
+        currentBase = new Vector2D(startBase.x, startBase.y);
 
         filterBox.setPrefSize(currentBase.x, currentBase.y);
 
@@ -176,8 +183,6 @@ public class SnapShotController implements Initializable {
 
         vec1.setPrefHeight(Region.USE_COMPUTED_SIZE);
         vec2.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
-        System.out.println(selectedImage.getBaselineOffset());
     }
 
     private void configImageView() {
@@ -196,29 +201,36 @@ public class SnapShotController implements Initializable {
         viewWidth = (int) (width - (width * per));
 
         if (viewWidth > maxWidth) {
-            double ratio = 1 - ((viewWidth - maxWidth) / viewWidth);
-
-            viewWidth = maxWidth;
-
-            selectedImage.setFitHeight(currentBase.y * ratio);
-            selectedImage.setFitWidth(0);
-
-            filterRectangle.setHeight(selectedImage.getFitHeight());
-            filterRectangle.setWidth(currentBase.x);
-
-            filterCircle.setRadius(selectedImage.getFitHeight() / 2);
-
-            filterBox.setPrefSize(currentBase.x, selectedImage.getFitHeight());
-
-            currentBase.y = (float) selectedImage.getFitHeight();
+            maxWidthAdjustment();
         }
 
+        System.out.println(viewWidth);
+    }
+
+    private void maxWidthAdjustment() {
+        double ratio = 1 - ((viewWidth - maxWidth) / viewWidth);
+
+        viewWidth = maxWidth;
+
+        selectedImage.setFitHeight(currentBase.y * ratio);
+        selectedImage.setFitWidth(0);
+
+        filterRectangle.setHeight(selectedImage.getFitHeight());
+        filterRectangle.setWidth(currentBase.x * ratio);
+
+        filterCircle.setRadius(selectedImage.getFitHeight() / 2);
+
+        filterBox.setPrefSize(currentBase.x * ratio, selectedImage.getFitHeight());
+
+        currentBase.y = (float) selectedImage.getFitHeight();
+        currentBase.x = (float) filterBox.getPrefWidth();
     }
 
 
     private void setVerticalImage() {
         double per = (height - currentBase.y) / height;
         viewWidth = (int) (width - (width * per));
+
         double per2 = ((currentBase.x - viewWidth) / viewWidth);
 
         viewWidth = currentBase.x;
@@ -231,10 +243,9 @@ public class SnapShotController implements Initializable {
         if (selectedImage.getFitHeight() > maxHeight) {
             maxHeightAdjustment();
         }
-
     }
 
-    private void adjustToYBase(){
+    private void adjustToYBase() {
         double per3 = 1 + ((currentBase.y - selectedImage.getFitHeight()) / selectedImage.getFitHeight());
 
         selectedImage.setFitHeight(currentBase.y);
@@ -243,7 +254,7 @@ public class SnapShotController implements Initializable {
         viewWidth = selectedImage.getFitWidth();
     }
 
-    private void maxHeightAdjustment(){
+    private void maxHeightAdjustment() {
         double ratio = 1 - ((selectedImage.getFitHeight() - maxHeight) / selectedImage.getFitHeight());
 
         selectedImage.setFitHeight(maxHeight);
@@ -259,38 +270,37 @@ public class SnapShotController implements Initializable {
         currentBase.x = (float) selectedImage.getFitWidth();
         currentBase.y *= ratio;
         viewWidth = selectedImage.getFitWidth();
-
     }
 
     // ----- Methods used to make the box move around the image -----
 
     private void setXDragSpeed() {
         if (selectedImage.getImage().getWidth() > maxWidth) {
-            dragX = 0.75 + ((selectedImage.getImage().getWidth() - maxWidth) * 0.005);
+            dragX = 0.50 + ((selectedImage.getImage().getWidth() - maxWidth) * 0.00075);
         } else {
-            dragX = 0.75 - ((selectedImage.getImage().getWidth() - maxWidth) * 0.005);
+            dragX = 0.50 - ((selectedImage.getImage().getWidth() - maxWidth) * 0.00075);
         }
 
         if (dragX < 0.3) {
             dragX = 0.3;
         }
-        if (dragX > 2.2) {
-            dragX = 1.25;
+        if (dragX > 1.00) {
+            dragX = 1.00;
         }
     }
 
     private void setYDragSpeed() {
         if (selectedImage.getImage().getHeight() > maxWidth) {
-            dragY = 0.75 + ((selectedImage.getImage().getHeight() - maxWidth) * 0.00075);
+            dragY = 0.50 + ((selectedImage.getImage().getHeight() - maxWidth) * 0.00075);
         } else {
-            dragY = 0.75 - ((selectedImage.getImage().getHeight() - maxWidth) * 0.00075);
+            dragY = 0.50 - ((selectedImage.getImage().getHeight() - maxWidth) * 0.00075);
         }
 
         if (dragY < 0.3) {
             dragY = 0.3;
         }
-        if (dragY > 2.2) {
-            dragY = 1.25;
+        if (dragY > 1.00) {
+            dragY = 1.00;
         }
     }
 
@@ -371,6 +381,7 @@ public class SnapShotController implements Initializable {
 
         filterBox.setOnMousePressed(me -> {
             location.y = (float) (me.getY() - viewWidth);
+            location.x = 0;
 
             imageBox.setCursor(Cursor.CLOSED_HAND);
         });
@@ -399,7 +410,7 @@ public class SnapShotController implements Initializable {
                     vSlider.setValue(vSlider.getValue() + dragY);
                 }
 
-                velocity.x = (float) (me.getX() - mid);
+                velocity.x = (float) me.getX();
 
                 if (rec1.getPrefWidth() < viewWidth - currentBase.x) {
                     if (location.x < velocity.x) {
@@ -458,6 +469,7 @@ public class SnapShotController implements Initializable {
         SnapshotParameters parameters = new SnapshotParameters();
 
         parameters.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
         parameters.setViewport(new Rectangle2D(viewPortVector.x, viewPortVector.y, currentBase.x, currentBase.y));
 
         selectedImage.snapshot(parameters, writableImage);
@@ -487,8 +499,13 @@ public class SnapShotController implements Initializable {
         cancelButton.setOnAction(event);
     }
 
-
     public void setCircleVisible(boolean set) {
         this.filterCircle.setVisible(set);
     }
+
+    public void setEndFactor(double factor) {
+        endFactor = factor;
+    }
+
+    private double endFactor;
 }
