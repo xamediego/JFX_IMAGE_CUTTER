@@ -193,6 +193,10 @@ public class SnapShotController implements Initializable {
         if (height > width) {
             setVerticalImage();
         }
+
+        if (height == width) {
+            setVerticalImage();
+        }
     }
 
     private void setHorizontalImage() {
