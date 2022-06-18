@@ -1,11 +1,10 @@
 package com;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class JFXApplication extends Application {
 
@@ -17,7 +16,6 @@ public class JFXApplication extends Application {
     public void start(Stage stage) {
         SnapShotScene snapShotScene = new SnapShotScene();
         snapShotScene.setBaseLine(300,300);
-        snapShotScene.setCircle(false);
 
         Scene scene = new Scene(snapShotScene.getRoot());
 
@@ -31,6 +29,5 @@ public class JFXApplication extends Application {
 
         stage.show();
     }
-
 
 }

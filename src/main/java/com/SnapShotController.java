@@ -39,6 +39,9 @@ public class SnapShotController implements Initializable {
     private HBox midBox;
 
     @FXML
+    private ImageView avatarView;
+
+    @FXML
     private HBox filterBox;
     @FXML
     private HBox rec1;
@@ -75,7 +78,6 @@ public class SnapShotController implements Initializable {
     private double zoomLvl, viewWidth, offSetX, offSetY, dragX, dragY;
 
     int dragSpeed = 2;
-    int mid = 0;
 
     private int maxWidth = 600;
     private int maxHeight = 425;
@@ -195,7 +197,7 @@ public class SnapShotController implements Initializable {
         }
 
         if (height == width) {
-            setVerticalImage();
+            setHorizontalImage();
         }
     }
 
@@ -207,8 +209,6 @@ public class SnapShotController implements Initializable {
         if (viewWidth > maxWidth) {
             maxWidthAdjustment();
         }
-
-        System.out.println(viewWidth);
     }
 
     private void maxWidthAdjustment() {
@@ -478,7 +478,21 @@ public class SnapShotController implements Initializable {
 
         selectedImage.snapshot(parameters, writableImage);
 
+        setAvatar(writableImage);
+
         return SwingFXUtils.fromFXImage(writableImage, null);
+    }
+
+    @FXML
+    public void setAvatar(Image image) {
+        avatarView.setImage(image);
+
+        Circle circle = new Circle(avatarView.getBaselineOffset() / 2);
+
+        circle.setLayoutX(avatarView.getFitWidth() / 2);
+        circle.setLayoutY(avatarView.getFitHeight() / 2);
+
+        avatarView.setClip(circle);
     }
 
     @FXML
@@ -492,7 +506,7 @@ public class SnapShotController implements Initializable {
 
     @FXML
     private void cancel() {
-
+        System.exit(0);
     }
 
     public void setSaveEvent(EventHandler<ActionEvent> event) {
@@ -506,10 +520,4 @@ public class SnapShotController implements Initializable {
     public void setCircleVisible(boolean set) {
         this.filterCircle.setVisible(set);
     }
-
-    public void setEndFactor(double factor) {
-        endFactor = factor;
-    }
-
-    private double endFactor;
 }

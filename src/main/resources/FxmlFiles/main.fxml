@@ -15,9 +15,9 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" stylesheets="@main.css" type="VBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="rootBox" fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" stylesheets="@main.css" type="VBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+      <HBox id="topBar" fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
             <Label text="Edit Image" textFill="WHITE">
                <font>
@@ -31,6 +31,21 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
+               <children>
+                  <HBox id="fixBox" fx:id="avatarBox" alignment="CENTER" prefHeight="40.0" prefWidth="40.0">
+                     <children>
+                        <StackPane HBox.hgrow="ALWAYS">
+                           <children>
+                              <ImageView id="avatarView" fx:id="avatarView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+                              <Circle id="avatarCircle" fill="DODGERBLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+                           </children>
+                        </StackPane>
+                     </children>
+                     <padding>
+                        <Insets right="15.0" />
+                     </padding>
+                  </HBox>
+               </children>
             </HBox>
          </children>
       </HBox>
@@ -96,7 +111,7 @@
             </HBox>
          </children>
       </VBox>
-      <HBox fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+      <HBox id="lowBar" fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
             <HBox alignment="CENTER" prefWidth="140.0" HBox.hgrow="NEVER">
                <HBox.margin>
