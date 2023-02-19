@@ -150,6 +150,7 @@ public class SnapShotController implements Initializable {
 
         setHorizontalView();
         setVerticalView();
+
         setZoomValue();
         configDrag();
         activateCropBox();
@@ -187,6 +188,7 @@ public class SnapShotController implements Initializable {
         vec2.setPrefHeight(Region.USE_COMPUTED_SIZE);
     }
 
+
     private void configImageView() {
         if (width > height) {
             setHorizontalImage();
@@ -197,8 +199,9 @@ public class SnapShotController implements Initializable {
         }
 
         if (height == width) {
-            setHorizontalImage();
+            viewWidth = startBase.x;
         }
+
     }
 
     private void setHorizontalImage() {
@@ -209,6 +212,7 @@ public class SnapShotController implements Initializable {
         if (viewWidth > maxWidth) {
             maxWidthAdjustment();
         }
+
     }
 
     private void maxWidthAdjustment() {
@@ -278,6 +282,8 @@ public class SnapShotController implements Initializable {
 
     // ----- Methods used to make the box move around the image -----
 
+
+    // ----- dragSpeed -----
     private void setXDragSpeed() {
         if (selectedImage.getImage().getWidth() > maxWidth) {
             dragX = 0.50 + ((selectedImage.getImage().getWidth() - maxWidth) * 0.00075);
@@ -286,12 +292,14 @@ public class SnapShotController implements Initializable {
         }
 
         if (dragX < 0.3) {
-            dragX = 0.3;
+            dragX = 0.7;
         }
         if (dragX > 1.00) {
-            dragX = 1.00;
+            dragX = 1;
         }
+
     }
+
 
     private void setYDragSpeed() {
         if (selectedImage.getImage().getHeight() > maxWidth) {
@@ -301,10 +309,10 @@ public class SnapShotController implements Initializable {
         }
 
         if (dragY < 0.3) {
-            dragY = 0.3;
+            dragY = 0.7;
         }
         if (dragY > 1.00) {
-            dragY = 1.00;
+            dragY = 1;
         }
     }
 
@@ -312,6 +320,7 @@ public class SnapShotController implements Initializable {
         zoomSlider.valueProperty().addListener(e -> setZoomValue(zoomSlider.getValue()));
     }
 
+    // ----- Slider hack -----
     private void setHorizontalView() {
         hSlider.valueProperty().addListener(e -> setHorizontalValue(hSlider.getValue()));
     }
@@ -324,6 +333,8 @@ public class SnapShotController implements Initializable {
         sliderBox.getChildren().remove(hSlider);
         sliderBox.getChildren().remove(vSlider);
     }
+
+    // ----- When zooming -----
 
     private void setZoomValue(double value) {
         zoomLvl = value;
@@ -379,6 +390,8 @@ public class SnapShotController implements Initializable {
         }
     }
 
+    // ----- configuring draging over the image -----
+
     private void configDrag() {
         Vector2D location = new Vector2D();
         Vector2D velocity = new Vector2D();
@@ -392,6 +405,7 @@ public class SnapShotController implements Initializable {
 
         filterBox.setOnMouseDragged(me -> {
             if (selectedImage.getImage() != null) {
+
                 imageBox.setCursor(Cursor.OPEN_HAND);
 
                 velocity.y = (float) (me.getY() - viewWidth);
@@ -426,6 +440,7 @@ public class SnapShotController implements Initializable {
                 }
 
                 if (rec2.getPrefWidth() < viewWidth - currentBase.x) {
+
                     if (location.x > velocity.x) {
                         rec1.setPrefWidth(rec1.getPrefWidth() - dragSpeed);
                         rec2.setPrefWidth(rec2.getPrefWidth() + dragSpeed);
@@ -436,6 +451,8 @@ public class SnapShotController implements Initializable {
             }
         });
     }
+
+    // ----- configuring crop coordinates -----
 
     private void setXCrop() {
         if (rec1.getPrefWidth() >= rec2.getPrefWidth()) {
@@ -482,6 +499,8 @@ public class SnapShotController implements Initializable {
 
         return SwingFXUtils.fromFXImage(writableImage, null);
     }
+
+    // ----- setting result avatar -----
 
     @FXML
     public void setAvatar(Image image) {

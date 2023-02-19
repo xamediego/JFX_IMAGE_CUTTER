@@ -1,3 +1,7 @@
+.primaryBackground{
+    -fx-background-color: #2f3137;
+}
+
 #filterFiller {
     -fx-background-color: d0d0d0;
     -fx-opacity: 0.45;
@@ -20,54 +24,48 @@
     -fx-stroke-type: CENTERED;
 }
 
-#paneBox {
-    -fx-background-color: #2e2d2d;
-}
-
-#selectFile {
+.menuButton {
     -fx-text-fill: #ffffff;
-    -fx-background-color: #807575;
-
+    -fx-background-color: #242526;
     -fx-background-radius: 6px;
 }
 
-#selectFile:hover {
-    -fx-background-color: rgba(145, 142, 142, 0.82);
-    -fx-opacity: 0.45;
+.menuButton:hover {
+    -fx-opacity: 0.9;
+    -fx-cursor: hand;
 }
 
-#rootBox {
-    /*-fx-background-radius: 15;*/
-    -fx-background-color: #2e2d2d;
-}
-
-#saveButton {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+.primaryButton {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
 
     -fx-text-fill: #ffffff;
     -fx-background-color: #5581d5;
     -fx-background-radius: 6px;
 }
 
-#saveButton:hover {
+.primaryButton:hover {
     -fx-background-color: #3b74e0;
     -fx-opacity: 0.9;
+
+    -fx-cursor: hand;
 }
 
-#cancelButton {
+.cancelButton {
     -fx-text-fill: #ffffff;
     -fx-background-color: TRANSPARENT;
     -fx-background-radius: 6px;
 
-    -fx-border-width: 1 1 1 1 ;
+    -fx-border-width: 1 1 1 1;
     -fx-border-color: RED;
 
     -fx-border-radius: 6px;
 }
 
-#cancelButton:hover {
+.cancelButton:hover {
     -fx-background-color: #ff3737;
     -fx-opacity: 0.8;
+
+    -fx-cursor: hand;
 }
 
 

@@ -15,21 +15,21 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root id="rootBox" fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" stylesheets="@main.css" type="VBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="rootBox" fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" styleClass="primaryBackground" stylesheets="@main.css" type="VBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox id="topBar" fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
          <children>
             <Label text="Edit Image" textFill="WHITE">
                <font>
-                  <Font name="Bookshelf Symbol 7" size="20.0" />
+                  <Font name="Bookshelf Symbol 7" size="22.0" />
                </font>
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </HBox.margin>
             </Label>
             <HBox alignment="CENTER_RIGHT" fillHeight="false" HBox.hgrow="ALWAYS">
                <HBox.margin>
-                  <Insets right="10.0" />
+                  <Insets />
                </HBox.margin>
                <children>
                   <HBox id="fixBox" fx:id="avatarBox" alignment="CENTER" prefHeight="40.0" prefWidth="40.0">
@@ -41,13 +41,13 @@
                            </children>
                         </StackPane>
                      </children>
-                     <padding>
-                        <Insets right="15.0" />
-                     </padding>
                   </HBox>
                </children>
             </HBox>
          </children>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </VBox.margin>
       </HBox>
       <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <VBox.margin>
@@ -111,14 +111,14 @@
             </HBox>
          </children>
       </VBox>
-      <HBox id="lowBar" fx:id="lowBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
+      <HBox fx:id="lowBar" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" prefWidth="600.0">
          <children>
-            <HBox alignment="CENTER" prefWidth="140.0" HBox.hgrow="NEVER">
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="70.0" HBox.hgrow="NEVER">
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </HBox.margin>
                <children>
-                  <Button id="selectFile" mnemonicParsing="false" onAction="#selectImage" text="Select File" />
+                  <Button mnemonicParsing="false" onAction="#selectImage" styleClass="menuButton" text="Select File" />
                </children>
             </HBox>
             <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
@@ -146,17 +146,20 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="lowBar1" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="140.0" spacing="10.0" HBox.hgrow="NEVER">
+            <HBox fx:id="lowBar1" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="140.0" spacing="10.0" HBox.hgrow="NEVER">
                <children>
-                  <Button id="cancelButton" fx:id="cancelButton" defaultButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="60.0" text="Cancel" />
-                  <Button id="saveButton" fx:id="saveButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#save" prefWidth="60.0" text="Save">
+                  <Button fx:id="cancelButton" defaultButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="60.0" styleClass="cancelButton" text="Cancel" />
+                  <Button fx:id="saveButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#save" prefWidth="60.0" styleClass="primaryButton" text="Save">
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
          </children>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </VBox.margin>
       </HBox>
    </children>
 </fx:root>
