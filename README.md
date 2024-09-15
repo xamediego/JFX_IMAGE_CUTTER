@@ -3,4 +3,4 @@
 Image cropper / cutter for avatars in javafx.  
 All of it just works.
 
-![imageCutter](https://user-images.githubusercontent.com/88188017/174444281-37fe53f3-b50e-4347-a044-20abc6ee7c55.png)
+![preview](https://github.com/user-attachments/assets/15be5f05-c87c-4b8a-a58d-f62db0b939f7)
