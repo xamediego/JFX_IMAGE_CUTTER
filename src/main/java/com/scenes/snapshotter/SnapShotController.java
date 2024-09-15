@@ -1,5 +1,6 @@
-package com;
+package com.scenes.snapshotter;
 
+import com.scenes.abstractscene.AbstractController;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SnapShotController implements Initializable {
+public class SnapShotController extends AbstractController implements Initializable {
 
     @FXML
     private ImageView selectedImage;
@@ -516,11 +517,13 @@ public class SnapShotController implements Initializable {
 
     @FXML
     private void save() {
+
         try {
             ImageIO.write(getCroppedImage(), "png", new File("defaultItemBoxImage.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @FXML

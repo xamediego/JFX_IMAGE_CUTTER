@@ -1,5 +1,7 @@
 package com;
 
+import com.application.JFXApplication;
+
 public class Main {
 
 

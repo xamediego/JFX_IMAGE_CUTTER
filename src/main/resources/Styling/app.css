@@ -1,0 +1,207 @@
+/*Background Styling*/
+
+/*.primaryBackground {*/
+/*    -fx-background-color: #363940;*/
+/*}*/
+
+.primaryBackground {
+    -fx-background-color: #292b30;
+}
+
+.secondaryBackground {
+    -fx-background-color: #292b30;
+}
+
+.tertiaryBackground {
+    -fx-background-color: #2f3137;
+}
+
+#transparantBackground {
+    -fx-background-color: #070709;
+}
+
+.confirmBox {
+    -fx-background-color: #2e2d2d;
+}
+
+/*ButtonStyling*/
+
+.primaryButton {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
+
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #5581d5;
+}
+
+.primaryButton:hover {
+    -fx-background-color: #3b74e0;
+    -fx-opacity: 0.9;
+
+    -fx-cursor: hand;
+}
+
+.tertiaryCancelButton {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: TRANSPARENT;
+
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: RED;
+}
+
+.tertiaryCancelButton:hover {
+    -fx-background-color: #ff3737;
+    -fx-opacity: 0.8;
+
+    -fx-cursor: hand;
+}
+
+.cancelButton {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
+
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #f33737;
+
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: RED;
+}
+
+.cancelButton:hover {
+    -fx-background-color: #ff3737;
+    -fx-opacity: 0.8;
+    -fx-cursor: hand;
+}
+
+.menuButton {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #242526;
+}
+
+.menuButton:hover {
+    -fx-opacity: 0.9;
+    -fx-cursor: hand;
+}
+
+.tertiaryMenuButton {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: TRANSPARENT;
+
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #242526;
+}
+
+.tertiaryMenuButton:hover {
+    -fx-background-color: #242526;
+    -fx-opacity: 0.8;
+    -fx-cursor: hand;
+}
+
+/*Input Field Styling*/
+
+.inputField {
+    -fx-background-color: #202226;
+
+    -fx-text-fill: #d5cbcb;
+
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
+}
+
+/*Text Styling*/
+
+.label {
+    -fx-text-fill: #eae7e7;
+}
+
+.labelError {
+    -fx-text-fill: #f80a0a;
+}
+
+/*Label Buttons*/
+
+.primaryLabelButton {
+    -fx-text-fill: #5367e5;
+
+    -fx-cursor: hand;
+}
+
+.cancelLabelButton {
+    -fx-text-fill: #f32727;
+
+    -fx-cursor: hand;
+}
+
+/*Choice Box Styling*/
+
+.combo-box {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0.2, 0.2, 0.2);
+    -fx-background-color: #202226;
+}
+
+.combo-box:hover {
+    -fx-opacity: 0.8;
+    -fx-background-color: #080809;
+    -fx-cursor: hand;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #2f3137;
+
+    -fx-text-fill: white;
+}
+
+.combo-box .list-cell:hover {
+    -fx-opacity: 0.8;
+    -fx-background-color: #26272c;
+
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #18191c;
+}
+
+/*Scroll pane Styling*/
+.scroll-pane {
+    -fx-background-color: #363940;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #1d2024;
+    -fx-background-radius: 2;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-opacity: 0.8;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: #1d2024 ;
+    -fx-background-radius: 2;
+}

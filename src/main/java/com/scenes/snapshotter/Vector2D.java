@@ -1,4 +1,4 @@
-package com;
+package com.scenes.snapshotter;
 
 public class Vector2D {
 

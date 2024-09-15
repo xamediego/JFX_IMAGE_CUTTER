@@ -1,26 +1,22 @@
-package com;
+package com.scenes.snapshotter;
 
+import com.enums.FXMLPart;
+import com.scenes.abstractscene.AbstractScene;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import java.io.IOException;
+public class SnapShotScene extends AbstractScene<SnapShotController> {
 
-public class SnapShotScene {
+    private final SnapShotController controller;
 
-    private SnapShotController controller;
-    private SnapShotter snap;
+    public SnapShotScene(SnapShotController controller, FXMLPart fxmlPart) {
+        super(controller, fxmlPart);
 
-    public SnapShotScene() {
-        try {
-            this.controller = new SnapShotController();
-            this.snap = new SnapShotter(this.controller);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        this.controller = controller;
     }
 
-    public void setSceneSize(int width, int height){
-        this.snap.setPrefSize(width ,height);
+    public void setSnapperSize(int width, int height){
+        this.getRoot().setPrefSize(width, height);
     }
 
     public void setMidBoxSize(int width, int height){
@@ -45,13 +41,5 @@ public class SnapShotScene {
 
     public void setCancelEvent(EventHandler<ActionEvent> event){
         this.controller.setCancelEvent(event);
-    }
-
-    public SnapShotController getController() {
-        return controller;
-    }
-
-    public SnapShotter getRoot(){
-        return this.snap;
     }
 }

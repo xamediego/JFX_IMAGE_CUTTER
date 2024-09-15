@@ -1,0 +1,28 @@
+#titleBox {
+    -fx-background-color: #131417;
+}
+
+#title {
+    -fx-text-fill: #eae7e7;
+}
+
+#menuButton {
+    -fx-background-color: TRANSPARENT;
+    -fx-text-fill: #eae7e7;
+}
+
+#menuButton:hover {
+    -fx-background-color: #1e1f24;
+    -fx-opacity: 0.8;
+}
+
+#exitButton {
+    -fx-background-color: TRANSPARENT;
+    -fx-text-fill: #eae7e7;
+}
+
+#exitButton:hover {
+    -fx-background-color: #d74646;
+    -fx-opacity: 0.8;
+}
+
