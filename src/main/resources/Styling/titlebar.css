@@ -1,5 +1,6 @@
 #titleBox {
     -fx-background-color: #131417;
+    -fx-end-margin: 5px;
 }
 
 #title {

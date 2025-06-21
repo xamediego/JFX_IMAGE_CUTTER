@@ -1,9 +1,4 @@
 /*Background Styling*/
-
-/*.primaryBackground {*/
-/*    -fx-background-color: #363940;*/
-/*}*/
-
 .primaryBackground {
     -fx-background-color: #292b30;
 }
@@ -25,7 +20,6 @@
 }
 
 /*ButtonStyling*/
-
 .primaryButton {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
 
@@ -96,7 +90,6 @@
 }
 
 /*Input Field Styling*/
-
 .inputField {
     -fx-background-color: #202226;
 
@@ -106,9 +99,17 @@
 }
 
 /*Text Styling*/
-
 .label {
     -fx-text-fill: #eae7e7;
+}
+
+/*text*/
+.h2 {
+    -fx-font-family: Inter;
+    -fx-font-size: 26px;
+    -fx-font-style: normal;
+    -fx-font-weight: 400;
+    -fx-text-fill: #cfcccc;
 }
 
 .labelError {
@@ -170,12 +171,12 @@
     -fx-border-color: transparent;
 }
 
-.scroll-bar:horizontal, .scroll-bar:vertical{
-    -fx-background-color:transparent;
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
 }
 
 .scroll-bar:horizontal .track,
-.scroll-bar:vertical .track{
+.scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0em;
@@ -183,11 +184,11 @@
 
 
 .scroll-bar:horizontal .track,
-.scroll-bar:vertical .track{
-    -fx-background-color :transparent;
-    -fx-border-color :transparent;
-    -fx-background-radius : 0.0em;
-    -fx-border-radius :2.0em;
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
 }
 
 .scroll-bar:horizontal .thumb,
@@ -202,6 +203,6 @@
 }
 
 .scroll-pane > .corner {
-    -fx-background-color: #1d2024 ;
+    -fx-background-color: #1d2024;
     -fx-background-radius: 2;
 }

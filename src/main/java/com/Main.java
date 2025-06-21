@@ -1,12 +1,8 @@
 package com;
 
-import com.application.JFXApplication;
-
 public class Main {
-
-
     public static void main(String[] args) {
+        System.out.println("Launch application");
         JFXApplication.main(args);
     }
-
 }

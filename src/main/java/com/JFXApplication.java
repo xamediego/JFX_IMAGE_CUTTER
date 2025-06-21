@@ -1,4 +1,4 @@
-package com.application;
+package com;
 
 import com.enums.FXMLPart;
 import com.goxr3plus.fxborderlessscene.borderless.BorderlessScene;
@@ -82,5 +82,4 @@ public class JFXApplication extends Application {
 
         customStage.show();
     }
-
 }

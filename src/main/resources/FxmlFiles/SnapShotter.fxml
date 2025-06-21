@@ -13,38 +13,33 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root id="rootBox" fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-         minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" styleClass="primaryBackground"
-         stylesheets="@../Styling/snapshotter.css" type="VBox" xmlns="http://javafx.com/javafx/20.0.1"
-         xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root id="rootBox" fx:id="rootBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" styleClass="snapshotter" stylesheets="@../Styling/snapshotter.css" type="VBox" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <HBox id="topBar" fx:id="topBar" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="600.0">
 
         <VBox.margin>
-            <Insets left="20.0" right="20.0"/>
+            <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
         </VBox.margin>
-        <Label text="Edit Image" textFill="WHITE">
+        <Label styleClass="h2" text="Edit Image" textFill="#9a9595">
 
             <font>
-                <Font name="Bookshelf Symbol 7" size="22.0"/>
+                <Font name="Arial" size="25.0" />
             </font>
             <HBox.margin>
-                <Insets/>
+                <Insets />
             </HBox.margin>
         </Label>
 
         <HBox alignment="CENTER_RIGHT" fillHeight="false" HBox.hgrow="ALWAYS">
             <HBox.margin>
-                <Insets/>
+                <Insets />
             </HBox.margin>
             <HBox id="fixBox" fx:id="avatarBox" alignment="CENTER" prefHeight="40.0" prefWidth="40.0">
                 <StackPane HBox.hgrow="ALWAYS">
-                    <ImageView id="avatarView" fx:id="avatarView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                               preserveRatio="true" styleClass="avatarView"/>
-                    <Circle fill="DODGERBLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE"
-                            styleClass="avatarCircle"/>
+                    <ImageView id="avatarView" fx:id="avatarView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="avatarView" />
+                    <Circle fill="DODGERBLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE" styleClass="avatarCircle" />
                 </StackPane>
             </HBox>
         </HBox>
@@ -52,87 +47,72 @@
 
     <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
         <VBox.margin>
-            <Insets/>
+            <Insets />
         </VBox.margin>
+
         <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-            <Line endX="-300.0" startX="300.0" stroke="#666666"/>
+            <Line endX="-300.0" startX="300.0" stroke="#666666" />
         </HBox>
-        <HBox fx:id="midBox" alignment="CENTER" fillHeight="false" prefHeight="450.0" prefWidth="800.0"
-              VBox.vgrow="ALWAYS">
+
+        <HBox fx:id="midBox" alignment="CENTER" fillHeight="false" prefHeight="450.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
             <HBox alignment="CENTER" fillHeight="false">
-                <HBox alignment="CENTER" HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" HBox.hgrow="ALWAYS" />
                 <HBox fx:id="imageBox" alignment="CENTER">
                     <StackPane fx:id="imagePane">
                         <ImageView fx:id="selectedImage" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
                             <viewport>
-                                <Rectangle2D/>
+                                <Rectangle2D />
                             </viewport>
                         </ImageView>
                         <HBox fx:id="cropBox" alignment="CENTER" disable="true" visible="false">
-                            <HBox id="filterFiller" styleClass="filterFiller" fx:id="rec1" HBox.hgrow="ALWAYS"/>
+                            <HBox id="filterFiller" fx:id="rec1" styleClass="filterFiller" HBox.hgrow="ALWAYS" />
                             <VBox>
-                                <VBox id="filterFiller" styleClass="filterFiller" fx:id="vec1" VBox.vgrow="ALWAYS"/>
-                                <HBox fx:id="filterBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
-                                      minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0">
+                                <VBox id="filterFiller" fx:id="vec1" styleClass="filterFiller" VBox.vgrow="ALWAYS" />
+                                <HBox fx:id="filterBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0">
                                     <StackPane>
-                                        <Circle fx:id="filterCircle" styleClass="filterCircle" fill="DODGERBLUE"
-                                                radius="150.0" stroke="BLACK" strokeType="INSIDE"/>
-                                        <Rectangle fx:id="filterRectangle" styleClass="filterRectangle" arcHeight="5.0"
-                                                   arcWidth="5.0" fill="DODGERBLUE" height="300.0" stroke="BLACK"
-                                                   strokeType="INSIDE" width="300.0"/>
+                                        <Circle fx:id="filterCircle" fill="DODGERBLUE" radius="150.0" stroke="BLACK" strokeType="INSIDE" styleClass="filterCircle" />
+                                        <Rectangle fx:id="filterRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" stroke="BLACK" strokeType="INSIDE" styleClass="filterRectangle" width="300.0" />
                                     </StackPane>
                                 </HBox>
-                                <VBox id="filterFiller" styleClass="filterFiller" fx:id="vec2" VBox.vgrow="ALWAYS"/>
+                                <VBox id="filterFiller" fx:id="vec2" styleClass="filterFiller" VBox.vgrow="ALWAYS" />
                             </VBox>
-                            <HBox id="filterFiller" styleClass="filterFiller" fx:id="rec2" HBox.hgrow="ALWAYS"/>
+                            <HBox id="filterFiller" fx:id="rec2" styleClass="filterFiller" HBox.hgrow="ALWAYS" />
                         </HBox>
                     </StackPane>
                 </HBox>
-                <HBox/>
+                <HBox />
             </HBox>
         </HBox>
         <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-            <Line endX="-300.0" startX="300.0" stroke="#666666"/>
+            <Line endX="-300.0" startX="300.0" stroke="#666666" />
         </HBox>
     </VBox>
     <HBox fx:id="lowBar" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" prefWidth="600.0">
         <VBox.margin>
-            <Insets left="20.0" right="20.0"/>
+            <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
         </VBox.margin>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-              prefHeight="25.0" prefWidth="70.0" HBox.hgrow="NEVER">
-            <HBox.margin>
-                <Insets/>
-            </HBox.margin>
-            <Button mnemonicParsing="false" onAction="#selectImage" styleClass="menuButton" text="Select File"/>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="90.0" HBox.hgrow="NEVER">
+            <Button mnemonicParsing="false" onAction="#selectImage" prefHeight="28.0" prefWidth="110.0" styleClass="menuButton" text="Select File" />
         </HBox>
         <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
             <VBox fx:id="sliderBox" alignment="CENTER" disable="true" spacing="5.0" visible="false" HBox.hgrow="ALWAYS">
                 <StackPane VBox.vgrow="NEVER">
                     <HBox alignment="CENTER" spacing="10.0">
-                        <FontIcon iconColor="WHITE" iconLiteral="fas-minus" iconSize="15"/>
-                        <Slider fx:id="zoomSlider" max="4.0" maxWidth="350.0" min="1.0" prefHeight="15.0"
-                                prefWidth="350.0"/>
-                        <FontIcon iconColor="WHITE" iconLiteral="fas-plus" iconSize="15"/>
+                        <FontIcon iconColor="WHITE" iconLiteral="fas-minus" iconSize="15" />
+                        <Slider fx:id="zoomSlider" max="4.0" maxWidth="350.0" min="1.0" prefHeight="15.0" prefWidth="350.0" />
+                        <FontIcon iconColor="WHITE" iconLiteral="fas-plus" iconSize="15" />
                     </HBox>
                     <VBox disable="true" visible="false">
-                        <Slider fx:id="hSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0"
-                                prefWidth="250.0" visible="false"/>
-                        <Slider fx:id="vSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0"
-                                prefWidth="250.0" visible="false"/>
+                        <Slider fx:id="hSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0" prefWidth="250.0" visible="false" />
+                        <Slider fx:id="vSlider" disable="true" max="4.0" maxWidth="250.0" prefHeight="15.0" prefWidth="250.0" visible="false" />
                     </VBox>
                 </StackPane>
             </VBox>
         </HBox>
-        <HBox fx:id="lowBar1" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="50.0" prefWidth="140.0" spacing="10.0" HBox.hgrow="NEVER">
-            <Button fx:id="cancelButton" defaultButton="true" mnemonicParsing="false" onAction="#cancel"
-                    prefWidth="60.0" styleClass="cancelButton" text="Cancel"/>
-            <Button fx:id="saveButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#save"
-                    prefWidth="60.0" styleClass="primaryButton" text="Save">
-                <HBox.margin>
-                    <Insets/>
-                </HBox.margin>
+
+        <HBox fx:id="lowBar1" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="180.0" spacing="10.0" HBox.hgrow="NEVER">
+            <Button fx:id="cancelButton" defaultButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="28.0" prefWidth="90.0" styleClass="cancelButton" text="Cancel" />
+            <Button fx:id="saveButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#save" prefHeight="28.0" prefWidth="90.0" styleClass="primaryButton" text="Save">
             </Button>
         </HBox>
     </HBox>

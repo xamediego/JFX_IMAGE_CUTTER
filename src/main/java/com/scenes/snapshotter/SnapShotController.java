@@ -114,6 +114,7 @@ public class SnapShotController extends AbstractController implements Initializa
 
         if (selectedFile != null) {
             String filePath = selectedFile.getAbsolutePath();
+            System.out.println(filePath);
 
             configureSnapper(new Image(filePath));
         }
